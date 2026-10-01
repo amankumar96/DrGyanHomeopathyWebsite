@@ -14,15 +14,18 @@ const BLOG_DIR = path.join(process.cwd(), "content/blog");
 const IMAGE_EXTENSIONS = new Set([".webp", ".jpg", ".jpeg", ".png"]);
 
 /**
- * Each disease/post has its own folder (public/images/diseases/<slug>/,
- * public/images/blog/<slug>/) — drop any image file in there, any filename,
- * and it's picked up automatically; no renaming to match the slug required.
- * If more than one image is present, the alphabetically-first one wins.
+ * Each disease has its own folder (public/images/diseases/<slug>/) — drop
+ * any image file in there, any filename, and it's picked up automatically;
+ * no renaming to match the slug required. If more than one image is
+ * present, the alphabetically-first one wins.
  *
- * The path is built inline per function (not passed through a shared helper
- * with a `dir` parameter) so Turbopack can statically trace it to this one
- * subfolder — passing a dynamic directory made it conservatively bundle all
- * of `public/` into the server output.
+ * The path is built inline (not passed through a shared helper with a `dir`
+ * parameter) so Turbopack can statically trace it to this one subfolder —
+ * passing a dynamic directory made it conservatively bundle all of
+ * `public/` into the server output.
+ *
+ * Blog posts deliberately don't have an equivalent — Latest News cards are
+ * text-only by design, no image slot.
  */
 function resolveDiseaseImage(slug: string): string | null {
   const dir = path.join(process.cwd(), "public/images/diseases", slug);
@@ -32,17 +35,6 @@ function resolveDiseaseImage(slug: string): string | null {
     .filter((f) => IMAGE_EXTENSIONS.has(path.extname(f).toLowerCase()))
     .sort()[0];
   return file ? `/images/diseases/${slug}/${file}` : null;
-}
-
-/** Same as resolveDiseaseImage, for public/images/blog/<slug>/. */
-function resolveBlogImage(slug: string): string | null {
-  const dir = path.join(process.cwd(), "public/images/blog", slug);
-  if (!fs.existsSync(dir)) return null;
-  const file = fs
-    .readdirSync(dir)
-    .filter((f) => IMAGE_EXTENSIONS.has(path.extname(f).toLowerCase()))
-    .sort()[0];
-  return file ? `/images/blog/${slug}/${file}` : null;
 }
 
 export type Faq = {
@@ -87,8 +79,6 @@ export type BlogFrontmatter = {
 
 export type BlogPost = BlogFrontmatter & {
   content: string;
-  /** Public URL if an uploaded cover image exists for this slug, else null. */
-  resolvedImage: string | null;
 };
 
 function readMdxDir<T>(dir: string): Array<T & { content: string }> {
@@ -117,12 +107,9 @@ export function getDiseaseBySlug(slug: string): Disease | undefined {
 }
 
 export function getAllBlogPosts(): BlogPost[] {
-  return readMdxDir<BlogFrontmatter>(BLOG_DIR)
-    .map((post) => ({
-      ...post,
-      resolvedImage: resolveBlogImage(post.slug),
-    }))
-    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+  return readMdxDir<BlogFrontmatter>(BLOG_DIR).sort(
+    (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
+  );
 }
 
 export function getBlogPostBySlug(slug: string): BlogPost | undefined {
