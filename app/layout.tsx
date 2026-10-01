@@ -5,6 +5,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import PageBackground from "@/components/PageBackground";
 import WhatsAppButton from "@/components/WhatsAppButton";
+import { getAllDiseases } from "@/lib/content";
 
 const fraunces = Fraunces({
   variable: "--font-fraunces",
@@ -23,16 +24,27 @@ export const metadata: Metadata = {
     "Homeopathic care in Vaishali, Ghaziabad from Dr. Gyanesh Sharma, BHMS, practising since 2003.",
 };
 
+function groupDiseasesByCategory() {
+  const grouped: Record<string, { slug: string; title: string }[]> = {};
+  for (const disease of getAllDiseases()) {
+    grouped[disease.category] ??= [];
+    grouped[disease.category].push({ slug: disease.slug, title: disease.title });
+  }
+  return grouped;
+}
+
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const diseasesByCategory = groupDiseasesByCategory();
+
   return (
     <html lang="en">
       <body className={`${fraunces.variable} ${inter.variable} antialiased`}>
         <PageBackground />
-        <Header />
+        <Header diseasesByCategory={diseasesByCategory} />
         {/* pb-6/10 guarantees clearance above the footer's tree-line decoration
             (see components/Footer.tsx) regardless of a page's own last-section
             padding, so content can never end flush against the footer. */}
