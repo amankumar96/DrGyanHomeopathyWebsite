@@ -1,11 +1,12 @@
 # Blog cover images
 
-Same convention as `public/images/diseases/README.md`: drop a file here named
-after the post's slug (`content/blog/<slug>.mdx`), any of `.webp`/`.jpg`/
-`.jpeg`/`.png`, and it replaces the placeholder automatically.
+Same convention as `public/images/diseases/README.md`: each post has its own
+folder here, named after its slug (`content/blog/<slug>.mdx`). Drop any
+image file into the matching folder — any filename, `.webp`/`.jpg`/`.jpeg`/
+`.png` — and it replaces the placeholder automatically.
 
-Current slugs waiting for a cover image:
+Folders ready for a cover image:
 
-- homeopathy-research-honest-look
-- monsoon-health-tips
-- winter-allergies-north-india
+- homeopathy-research-honest-look/
+- monsoon-health-tips/
+- winter-allergies-north-india/

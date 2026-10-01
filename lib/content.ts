@@ -11,37 +11,38 @@ import matter from "gray-matter";
 const DISEASES_DIR = path.join(process.cwd(), "content/diseases");
 const BLOG_DIR = path.join(process.cwd(), "content/blog");
 
-const IMAGE_EXTENSIONS = [".webp", ".jpg", ".jpeg", ".png"];
+const IMAGE_EXTENSIONS = new Set([".webp", ".jpg", ".jpeg", ".png"]);
 
 /**
- * Looks for <slug>.{webp,jpg,jpeg,png} in public/images/diseases and returns its
- * public URL path, or null if nothing has been uploaded yet. This is what lets a
- * page silently upgrade from a placeholder to a real image the moment a file
- * matching the slug is dropped in — no frontmatter or code change needed. See
- * public/images/diseases/README.md for the upload convention.
+ * Each disease/post has its own folder (public/images/diseases/<slug>/,
+ * public/images/blog/<slug>/) — drop any image file in there, any filename,
+ * and it's picked up automatically; no renaming to match the slug required.
+ * If more than one image is present, the alphabetically-first one wins.
  *
- * The path is built inline (not passed through a shared helper with a `dir`
- * parameter) so Turbopack can statically trace it to this one subfolder —
- * passing a dynamic directory made it conservatively bundle all of `public/`
- * into the server output.
+ * The path is built inline per function (not passed through a shared helper
+ * with a `dir` parameter) so Turbopack can statically trace it to this one
+ * subfolder — passing a dynamic directory made it conservatively bundle all
+ * of `public/` into the server output.
  */
 function resolveDiseaseImage(slug: string): string | null {
-  for (const ext of IMAGE_EXTENSIONS) {
-    if (fs.existsSync(path.join(process.cwd(), "public/images/diseases", `${slug}${ext}`))) {
-      return `/images/diseases/${slug}${ext}`;
-    }
-  }
-  return null;
+  const dir = path.join(process.cwd(), "public/images/diseases", slug);
+  if (!fs.existsSync(dir)) return null;
+  const file = fs
+    .readdirSync(dir)
+    .filter((f) => IMAGE_EXTENSIONS.has(path.extname(f).toLowerCase()))
+    .sort()[0];
+  return file ? `/images/diseases/${slug}/${file}` : null;
 }
 
-/** Same as resolveDiseaseImage, for public/images/blog. */
+/** Same as resolveDiseaseImage, for public/images/blog/<slug>/. */
 function resolveBlogImage(slug: string): string | null {
-  for (const ext of IMAGE_EXTENSIONS) {
-    if (fs.existsSync(path.join(process.cwd(), "public/images/blog", `${slug}${ext}`))) {
-      return `/images/blog/${slug}${ext}`;
-    }
-  }
-  return null;
+  const dir = path.join(process.cwd(), "public/images/blog", slug);
+  if (!fs.existsSync(dir)) return null;
+  const file = fs
+    .readdirSync(dir)
+    .filter((f) => IMAGE_EXTENSIONS.has(path.extname(f).toLowerCase()))
+    .sort()[0];
+  return file ? `/images/blog/${slug}/${file}` : null;
 }
 
 export type Faq = {
