@@ -5,15 +5,18 @@ export default function Footer() {
   return (
     <footer className="relative bg-forest-800 text-leaf-50">
       {/* Tree-line silhouette straddling the footer's top edge (guide §3.4) — canopies
-          read against the light page background above; trunks fade into the footer. */}
-      <Image
-        src="/images/footer-treeline.png"
-        alt=""
-        aria-hidden="true"
-        width={1600}
-        height={899}
-        className="pointer-events-none absolute left-0 right-0 top-0 h-auto w-full -translate-y-[72%] opacity-90"
-      />
+          read against the light page background above; trunks fade into the footer.
+          Fixed, bounded height (not width-driven) so it can never grow tall enough
+          to reach up into page content above on short pages — guide §29. */}
+      <div className="pointer-events-none absolute left-0 right-0 top-0 h-20 -translate-y-12 overflow-hidden opacity-90 md:h-32 md:-translate-y-20">
+        <Image
+          src="/images/footer-treeline.png"
+          alt=""
+          aria-hidden="true"
+          fill
+          className="object-cover object-bottom"
+        />
+      </div>
 
       <div className="relative mx-auto grid max-w-6xl gap-8 px-4 py-10 md:grid-cols-3 md:px-6">
         <div>

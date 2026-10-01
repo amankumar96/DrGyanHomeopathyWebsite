@@ -4,6 +4,7 @@ import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import PageBackground from "@/components/PageBackground";
+import WhatsAppButton from "@/components/WhatsAppButton";
 
 const fraunces = Fraunces({
   variable: "--font-fraunces",
@@ -34,6 +35,7 @@ export default function RootLayout({
         <Header />
         <main>{children}</main>
         <Footer />
+        <WhatsAppButton />
       </body>
     </html>
   );

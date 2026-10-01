@@ -1,5 +1,8 @@
 import Link from "next/link";
 import Hero from "@/components/Hero";
+import DiseaseCard from "@/components/DiseaseCard";
+import BlogCard from "@/components/BlogCard";
+import { getAllDiseases, getAllBlogPosts } from "@/lib/content";
 import {
   ExperienceIcon,
   QualificationIcon,
@@ -12,16 +15,6 @@ const TRUST_POINTS = [
   { icon: HolisticIcon, label: "Holistic, individualised consultations" },
 ];
 
-// TODO: replace with real disease list via DiseaseCard once content/diseases MDX exists
-const CONDITION_PLACEHOLDERS = [
-  "Skin Conditions",
-  "Respiratory Health",
-  "Digestive Health",
-  "Joint & Mobility",
-  "Women's Health",
-  "Child Health",
-];
-
 const WHY_CHOOSE_US = [
   "Personalised, one-to-one consultation",
   "Holistic approach to care",
@@ -30,6 +23,9 @@ const WHY_CHOOSE_US = [
 ];
 
 export default function Home() {
+  const diseases = getAllDiseases().slice(0, 6);
+  const posts = getAllBlogPosts().slice(0, 3);
+
   return (
     <>
       <Hero />
@@ -77,16 +73,15 @@ export default function Home() {
           <h2 className="font-heading text-2xl font-semibold text-forest-800">
             Conditions We Treat
           </h2>
-          <div className="mt-6 grid grid-cols-2 gap-4 md:grid-cols-3">
-            {CONDITION_PLACEHOLDERS.map((condition) => (
-              <div
-                key={condition}
-                className="rounded-2xl border border-leaf-200 bg-white p-5 text-center text-sm font-medium text-ink"
-              >
-                {condition}
-              </div>
-            ))}
-          </div>
+          {diseases.length === 0 ? (
+            <p className="mt-6 text-sm text-ink/70">Condition pages are being added.</p>
+          ) : (
+            <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
+              {diseases.map((disease) => (
+                <DiseaseCard key={disease.slug} disease={disease} />
+              ))}
+            </div>
+          )}
           <Link
             href="/diseases"
             className="mt-6 inline-block text-sm font-semibold text-forest-600 hover:text-forest-800"
@@ -127,10 +122,17 @@ export default function Home() {
       {/* Latest news */}
       <section className="mx-auto max-w-6xl px-4 py-14 md:px-6">
         <h2 className="font-heading text-2xl font-semibold text-forest-800">Latest News</h2>
-        <div className="mt-6 rounded-2xl border border-leaf-200 bg-leaf-50 p-6 text-sm text-ink/70">
-          {/* TODO: replace with 3 latest BlogCards once content/blog MDX pipeline exists */}
-          Blog posts coming soon.
-        </div>
+        {posts.length === 0 ? (
+          <div className="mt-6 rounded-2xl border border-leaf-200 bg-leaf-50 p-6 text-sm text-ink/70">
+            Blog posts coming soon.
+          </div>
+        ) : (
+          <div className="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {posts.map((post) => (
+              <BlogCard key={post.slug} post={post} />
+            ))}
+          </div>
+        )}
         <Link
           href="/blog"
           className="mt-4 inline-block text-sm font-semibold text-forest-600 hover:text-forest-800"

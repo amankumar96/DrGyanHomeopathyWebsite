@@ -1,9 +1,20 @@
+import Image from "next/image";
 import Link from "next/link";
 
 export default function Hero() {
   return (
-    <section className="relative">
-      {/* Background image is global — see components/PageBackground.tsx (app/layout.tsx) */}
+    <section className="relative overflow-hidden">
+      {/* Full-strength botanical frame, scoped to the hero only. The site-wide
+          PageBackground (app/layout.tsx) stays deliberately subtle so it never
+          competes with body text elsewhere — see that component's comment. */}
+      <Image
+        src="/images/BG.png"
+        alt=""
+        fill
+        priority
+        className="object-cover object-center"
+      />
+
       <div className="relative mx-auto max-w-6xl px-4 py-16 md:px-6 md:py-24">
         <div className="relative max-w-xl">
           {/* Soft readability glow behind the text only — not a full-hero overlay */}
