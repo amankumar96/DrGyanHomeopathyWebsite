@@ -7,8 +7,11 @@ export default function Footer() {
       {/* Tree-line silhouette straddling the footer's top edge (guide §3.4) — canopies
           read against the light page background above; trunks fade into the footer.
           Fixed, bounded height (not width-driven) so it can never grow tall enough
-          to reach up into page content above on short pages — guide §29. */}
-      <div className="pointer-events-none absolute left-0 right-0 top-0 h-20 -translate-y-12 overflow-hidden opacity-90 md:h-32 md:-translate-y-20">
+          to reach up into page content above — guide §29. Kept well inside the
+          smallest bottom padding any page section uses above the footer (py-10/
+          2.5rem+), so it can never collide with the last section's content even
+          on short pages. See app/layout.tsx for the matching pb-* on <main>. */}
+      <div className="pointer-events-none absolute left-0 right-0 top-0 h-12 -translate-y-6 overflow-hidden opacity-90 md:h-20 md:-translate-y-10">
         <Image
           src="/images/footer-treeline.png"
           alt=""

@@ -33,7 +33,10 @@ export default function RootLayout({
       <body className={`${fraunces.variable} ${inter.variable} antialiased`}>
         <PageBackground />
         <Header />
-        <main>{children}</main>
+        {/* pb-6/10 guarantees clearance above the footer's tree-line decoration
+            (see components/Footer.tsx) regardless of a page's own last-section
+            padding, so content can never end flush against the footer. */}
+        <main className="pb-6 md:pb-10">{children}</main>
         <Footer />
         <WhatsAppButton />
       </body>
