@@ -1,9 +1,21 @@
+import Image from "next/image";
 import Link from "next/link";
 
 export default function Footer() {
   return (
-    <footer className="bg-forest-800 text-leaf-50">
-      <div className="mx-auto grid max-w-6xl gap-8 px-4 py-10 md:grid-cols-3 md:px-6">
+    <footer className="relative bg-forest-800 text-leaf-50">
+      {/* Tree-line silhouette straddling the footer's top edge (guide §3.4) — canopies
+          read against the light page background above; trunks fade into the footer. */}
+      <Image
+        src="/images/footer-treeline.png"
+        alt=""
+        aria-hidden="true"
+        width={1600}
+        height={899}
+        className="pointer-events-none absolute left-0 right-0 top-0 h-auto w-full -translate-y-[72%] opacity-90"
+      />
+
+      <div className="relative mx-auto grid max-w-6xl gap-8 px-4 py-10 md:grid-cols-3 md:px-6">
         <div>
           <p className="font-heading text-lg font-semibold">Dr. Gyan&apos;s Homeopathy</p>
           <p className="mt-1 text-sm text-leaf-200">Treatment for Everyone</p>
