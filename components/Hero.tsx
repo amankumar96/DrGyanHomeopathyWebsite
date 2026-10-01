@@ -1,20 +1,16 @@
-import Image from "next/image";
 import Link from "next/link";
 
 export default function Hero() {
   return (
-    <section className="relative overflow-hidden bg-leaf-50">
-      <Image
-        src="/images/bonsai.svg"
-        alt=""
-        width={220}
-        height={220}
-        className="pointer-events-none absolute -top-6 right-0 select-none md:right-4"
-        priority
-      />
-
+    <section className="relative">
+      {/* Background image is global — see components/PageBackground.tsx (app/layout.tsx) */}
       <div className="relative mx-auto max-w-6xl px-4 py-16 md:px-6 md:py-24">
-        <div className="max-w-xl">
+        <div className="relative max-w-xl">
+          {/* Soft readability glow behind the text only — not a full-hero overlay */}
+          <div
+            aria-hidden
+            className="absolute -inset-x-6 -inset-y-10 -z-10 rounded-[2.5rem] bg-white/60 blur-2xl md:bg-white/50"
+          />
           <h1 className="font-heading text-3xl font-semibold text-forest-800 md:text-5xl">
             Gentle, Personalised Homeopathic Care in Vaishali
           </h1>

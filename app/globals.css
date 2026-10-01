@@ -17,6 +17,10 @@
   --sunlight: #f6c453;
   --ink: #1f2a24;
   --white: #ffffff;
+
+  /* Hero background base color, shown at the edges of public/images/BG.png
+     and as the page fallback before the image paints. */
+  --botanical-base: #f3f8ee;
 }
 
 @theme inline {
@@ -35,7 +39,7 @@
 }
 
 body {
-  background: var(--leaf-50);
+  background: var(--botanical-base);
   color: var(--ink);
   font-family: var(--font-body);
 }

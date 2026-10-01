@@ -1,10 +1,15 @@
 import Link from "next/link";
 import Hero from "@/components/Hero";
+import {
+  ExperienceIcon,
+  QualificationIcon,
+  HolisticIcon,
+} from "@/components/icons/TrustIcons";
 
 const TRUST_POINTS = [
-  "Practising since 2005",
-  "BHMS, Homeopathic Medical College, Lucknow",
-  "Holistic, individualised consultations",
+  { icon: ExperienceIcon, label: "Practising since 2005" },
+  { icon: QualificationIcon, label: "BHMS, Homeopathic Medical College, Lucknow" },
+  { icon: HolisticIcon, label: "Holistic, individualised consultations" },
 ];
 
 // TODO: replace with real disease list via DiseaseCard once content/diseases MDX exists
@@ -30,10 +35,15 @@ export default function Home() {
       <Hero />
 
       {/* Trust strip */}
-      <section className="border-y border-leaf-200 bg-leaf-100">
-        <div className="mx-auto flex max-w-6xl flex-col gap-3 px-4 py-6 text-center text-sm font-medium text-forest-800 md:flex-row md:justify-center md:gap-10 md:px-6">
-          {TRUST_POINTS.map((point) => (
-            <span key={point}>{point}</span>
+      <section className="px-4 py-8 md:px-6">
+        <div className="mx-auto flex max-w-6xl flex-col gap-8 rounded-2xl border border-leaf-200 bg-leaf-100/80 px-4 py-8 md:flex-row md:justify-center md:gap-16 md:px-6">
+          {TRUST_POINTS.map(({ icon: Icon, label }) => (
+            <div key={label} className="flex flex-col items-center gap-3 text-center">
+              <span className="flex h-16 w-16 items-center justify-center rounded-full bg-leaf-100 text-forest-800">
+                <Icon className="h-8 w-8" />
+              </span>
+              <span className="max-w-[12rem] text-sm font-medium text-forest-800">{label}</span>
+            </div>
           ))}
         </div>
       </section>
@@ -62,8 +72,8 @@ export default function Home() {
       </section>
 
       {/* Conditions we treat */}
-      <section className="bg-leaf-100 py-14">
-        <div className="mx-auto max-w-6xl px-4 md:px-6">
+      <section className="px-4 py-14 md:px-6">
+        <div className="mx-auto max-w-6xl rounded-3xl bg-leaf-100/80 p-6 md:p-10">
           <h2 className="font-heading text-2xl font-semibold text-forest-800">
             Conditions We Treat
           </h2>
@@ -102,8 +112,8 @@ export default function Home() {
       </section>
 
       {/* Testimonials — placeholder until real, consented reviews are provided */}
-      <section className="bg-leaf-100 py-14">
-        <div className="mx-auto max-w-6xl px-4 md:px-6">
+      <section className="px-4 py-14 md:px-6">
+        <div className="mx-auto max-w-6xl rounded-3xl bg-leaf-100/80 p-6 md:p-10">
           <h2 className="font-heading text-2xl font-semibold text-forest-800">
             What Our Patients Say
           </h2>
@@ -130,8 +140,8 @@ export default function Home() {
       </section>
 
       {/* Location & contact */}
-      <section className="bg-leaf-100 py-14">
-        <div className="mx-auto max-w-6xl px-4 md:px-6">
+      <section className="px-4 py-14 md:px-6">
+        <div className="mx-auto max-w-6xl rounded-3xl bg-leaf-100/80 p-6 md:p-10">
           <h2 className="font-heading text-2xl font-semibold text-forest-800">Visit the Clinic</h2>
           <div className="mt-6 grid gap-6 md:grid-cols-2">
             <div className="aspect-video w-full rounded-2xl bg-leaf-200/60" aria-hidden>

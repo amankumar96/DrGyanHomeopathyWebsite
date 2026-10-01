@@ -3,6 +3,7 @@ import { Fraunces, Inter } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import PageBackground from "@/components/PageBackground";
 
 const fraunces = Fraunces({
   variable: "--font-fraunces",
@@ -29,6 +30,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${fraunces.variable} ${inter.variable} antialiased`}>
+        <PageBackground />
         <Header />
         <main>{children}</main>
         <Footer />

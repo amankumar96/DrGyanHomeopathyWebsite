@@ -4,5 +4,4 @@ Track the license/source for every non-placeholder image used on the site (guide
 
 | File | Source | License | Notes |
 |---|---|---|---|
-| bonsai.svg | hand-built placeholder | — | replace with final illustration |
-| leaf-texture.svg | hand-built placeholder | — | replace with final texture |
+| BG.png | provided by user | TODO: confirm license/source before launch | hero section botanical frame background |
