@@ -1,0 +1,3 @@
+Disease MDX files go here, one per disease. See guide §6 for the required frontmatter
+(title, slug, category, summary, image, seoTitle, seoDescription, lastReviewed, reviewedBy,
+sources, related, faqs) and the body template in guide §5.4.
