@@ -3,8 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 
-const NAV_LINKS = [
-  { href: "/about", label: "About" },
+const NAV_LINKS_AFTER_DISEASES = [
   { href: "/blog", label: "Latest News" },
   { href: "/contact", label: "Contact Us" },
 ];
@@ -29,6 +28,13 @@ export default function Header({
         </Link>
 
         <nav className="hidden items-center gap-6 md:flex">
+          <Link
+            href="/about"
+            className="text-sm font-medium text-ink transition-colors hover:text-forest-600"
+          >
+            About
+          </Link>
+
           {/* Diseases — hover dropdown grouped by category */}
           <div className="group relative">
             <Link
@@ -43,7 +49,7 @@ export default function Header({
 
             {categories.length > 0 && (
               <div className="invisible absolute left-1/2 top-full z-50 w-[640px] -translate-x-1/2 pt-3 opacity-0 transition-opacity group-hover:visible group-hover:opacity-100">
-                <div className="grid grid-cols-3 gap-x-6 gap-y-4 rounded-2xl border border-leaf-200 bg-white p-6 shadow-lg">
+                <div className="grid max-h-[70vh] grid-cols-3 gap-x-6 gap-y-4 overflow-y-auto rounded-2xl border border-leaf-200 bg-white p-6 shadow-lg">
                   {categories.map((category) => (
                     <div key={category}>
                       <p className="text-xs font-semibold uppercase tracking-wide text-forest-600">
@@ -73,7 +79,7 @@ export default function Header({
             )}
           </div>
 
-          {NAV_LINKS.map((link) => (
+          {NAV_LINKS_AFTER_DISEASES.map((link) => (
             <Link
               key={link.href}
               href={link.href}
@@ -110,6 +116,14 @@ export default function Header({
 
       {menuOpen && (
         <nav className="flex flex-col gap-1 border-t border-leaf-200 bg-leaf-50 px-4 py-3 md:hidden">
+          <Link
+            href="/about"
+            className="rounded px-2 py-2 text-sm font-medium text-ink hover:bg-leaf-100"
+            onClick={() => setMenuOpen(false)}
+          >
+            About
+          </Link>
+
           {/* Diseases — expandable grouped list */}
           <div>
             <button
@@ -149,7 +163,7 @@ export default function Header({
             )}
           </div>
 
-          {NAV_LINKS.map((link) => (
+          {NAV_LINKS_AFTER_DISEASES.map((link) => (
             <Link
               key={link.href}
               href={link.href}

@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { MDXRemote } from "next-mdx-remote/rsc";
@@ -70,6 +71,22 @@ export default async function DiseaseDetailPage({
       <h1 className="mt-4 font-heading text-3xl font-semibold text-forest-800 md:text-4xl">
         {disease.title}
       </h1>
+
+      <div className="relative mt-6 aspect-[16/9] w-full overflow-hidden rounded-2xl bg-leaf-200/60">
+        {disease.resolvedImage ? (
+          <Image
+            src={disease.resolvedImage}
+            alt={disease.imageAlt}
+            fill
+            priority
+            className="object-cover"
+          />
+        ) : (
+          <span className="absolute inset-0 flex items-center justify-center text-center text-sm text-forest-800/50">
+            Image coming soon
+          </span>
+        )}
+      </div>
 
       <div className="mt-4 flex flex-wrap gap-3 rounded-2xl border border-leaf-200 bg-leaf-100/80 p-4 text-sm text-forest-800">
         <span>
