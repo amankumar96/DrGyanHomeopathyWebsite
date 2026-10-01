@@ -4,5 +4,6 @@ Track the license/source for every non-placeholder image used on the site (guide
 
 | File | Source | License | Notes |
 |---|---|---|---|
-| BG.png | provided by user | TODO: confirm license/source before launch | hero section botanical frame background |
+| hero-bg-minimal.png | Canva AI image generation | Generated under this account's Canva Pro license | current hero/site-wide background — lighter v2, replaced BG.png |
+| BG.png | provided by user | TODO: confirm license/source before launch | superseded by hero-bg-minimal.png; kept in repo in case you want to revert, not referenced in code |
 | footer-treeline.png | Canva AI image generation | Generated under this account's Canva Pro license | footer tree-line silhouette; transparency keyed out from Canva's export in post-processing |

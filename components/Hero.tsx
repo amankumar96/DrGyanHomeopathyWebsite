@@ -8,7 +8,7 @@ export default function Hero() {
           PageBackground (app/layout.tsx) stays deliberately subtle so it never
           competes with body text elsewhere — see that component's comment. */}
       <Image
-        src="/images/BG.png"
+        src="/images/hero-bg-minimal.png"
         alt=""
         fill
         priority
@@ -17,11 +17,6 @@ export default function Hero() {
 
       <div className="relative mx-auto max-w-6xl px-4 py-16 md:px-6 md:py-24">
         <div className="relative max-w-xl">
-          {/* Soft readability glow behind the text only — not a full-hero overlay */}
-          <div
-            aria-hidden
-            className="absolute -inset-x-6 -inset-y-10 -z-10 rounded-[2.5rem] bg-white/60 blur-2xl md:bg-white/50"
-          />
           <h1 className="font-heading text-3xl font-semibold text-forest-800 md:text-5xl">
             Gentle, Personalised Homeopathic Care in Vaishali
           </h1>
