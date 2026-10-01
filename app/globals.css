@@ -1,0 +1,55 @@
+@import "tailwindcss";
+
+/*
+  Healing Forest design tokens — the single source of truth for the theme.
+  Change a value here and every component using the matching Tailwind
+  utility (bg-leaf-50, text-forest-800, font-heading, etc.) updates.
+  See guide §3.2/§3.3 and ARCHITECTURE.md "Design tokens" section.
+*/
+:root {
+  --leaf-50: #f3faf0;
+  --leaf-100: #e4f3dc;
+  --leaf-200: #c8e6b8;
+  --leaf-400: #7cbf5e;
+  --forest-600: #2f7d32;
+  --forest-800: #1e4d2b;
+  --bark-700: #5b4636;
+  --sunlight: #f6c453;
+  --ink: #1f2a24;
+  --white: #ffffff;
+}
+
+@theme inline {
+  --color-leaf-50: var(--leaf-50);
+  --color-leaf-100: var(--leaf-100);
+  --color-leaf-200: var(--leaf-200);
+  --color-leaf-400: var(--leaf-400);
+  --color-forest-600: var(--forest-600);
+  --color-forest-800: var(--forest-800);
+  --color-bark-700: var(--bark-700);
+  --color-sunlight: var(--sunlight);
+  --color-ink: var(--ink);
+
+  --font-heading: var(--font-fraunces);
+  --font-body: var(--font-inter);
+}
+
+body {
+  background: var(--leaf-50);
+  color: var(--ink);
+  font-family: var(--font-body);
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-heading);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
