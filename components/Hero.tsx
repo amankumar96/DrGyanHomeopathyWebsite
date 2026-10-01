@@ -21,7 +21,7 @@ export default function Hero() {
             Gentle, Personalised Homeopathic Care in Vaishali
           </h1>
           <p className="mt-4 text-base text-ink/80 md:text-lg">
-            Treatment for Everyone — Dr. Gyanesh Sharma, BHMS, practising since 2005.
+            Treatment for Everyone — Dr. Gyanesh Sharma, BHMS, practising since 2003.
           </p>
           <div className="mt-6 flex flex-wrap gap-3">
             <Link

@@ -10,8 +10,8 @@ import {
 } from "@/components/icons/TrustIcons";
 
 const TRUST_POINTS = [
-  { icon: ExperienceIcon, label: "Practising since 2005" },
-  { icon: QualificationIcon, label: "BHMS, Homeopathic Medical College, Lucknow" },
+  { icon: ExperienceIcon, label: "Practising since 2003" },
+  { icon: QualificationIcon, label: "BHMS, National Homeopathic Medical College, Lucknow" },
   { icon: HolisticIcon, label: "Holistic, individualised consultations" },
 ];
 
@@ -53,9 +53,11 @@ export default function Home() {
               About Dr. Gyanesh Sharma
             </h2>
             <p className="mt-3 text-ink/80">
-              {/* TODO: real bio pending doctor-provided details (guide §5.2) */}
-              Placeholder bio — Dr. Sharma has been practising homeopathy since 2005, starting in
-              Lucknow and now serving patients in Vaishali, Ghaziabad.
+              Dr. Gyanesh Sharma is an experienced homeopathic doctor practising since 2003. He
+              began his journey in Lucknow and now runs his clinic in Vaishali, Ghaziabad. Dr.
+              Sharma is a BHMS graduate from National Homeopathic Medical College, Lucknow, UP,
+              with a focus on children&apos;s health, hair and skin conditions, and
+              lifestyle-related concerns.
             </p>
             <Link
               href="/about"

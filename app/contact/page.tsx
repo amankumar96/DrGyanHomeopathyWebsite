@@ -56,9 +56,12 @@ export default function ContactPage() {
               </dd>
             </div>
             <div>
-              {/* TODO: confirm exact consultation timings with the clinic */}
               <dt className="font-semibold text-forest-800">Timings</dt>
-              <dd className="mt-1 text-ink/70">To be confirmed — please call ahead.</dd>
+              <dd className="mt-1 text-ink/70">
+                Mon – Sat: 9:30 AM – 1:30 PM &amp; 6:00 PM – 9:00 PM
+                <br />
+                Sunday: Closed
+              </dd>
             </div>
           </dl>
 

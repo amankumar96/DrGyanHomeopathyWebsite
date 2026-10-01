@@ -1,5 +1,5 @@
 /**
- * Minimal line-art icons for the trust strip (guide §5.1 "Practising since 2005",
+ * Minimal line-art icons for the trust strip (guide §5.1 "Practising since 2003",
  * "BHMS, Lucknow", "Holistic, individualised consultations"). Hand-coded SVG —
  * stroke-only, no fills, consistent stroke width, no text/numbers. Each is sized
  * by its wrapper; color comes from `currentColor` so a parent sets text color.

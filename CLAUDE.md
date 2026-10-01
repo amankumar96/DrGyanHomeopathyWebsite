@@ -7,8 +7,8 @@ this file is the condensed, load-bearing subset: facts and rules that must not d
 ## Clinic facts
 
 - Clinic: Dr. Gyan's Homeopathy — Tagline: "Treatment for Everyone"
-- Doctor: Dr. Gyanesh Sharma, BHMS (Homeopathic Medical College, Lucknow)
-- Practising since 2005 (Lucknow, now Vaishali, Ghaziabad)
+- Doctor: Dr. Gyanesh Sharma, BHMS (National Homeopathic Medical College, Lucknow, UP)
+- Practising since 2003 (Lucknow, now Vaishali, Ghaziabad)
 - Address: Shop No. 9, 1st Floor, Kshitij Complex, Sector 4, Vaishali, Ghaziabad, UP 201010
 - Email: care@drgyanshomeopathy.com — Phone: +91 98711 90713
 - Social: Facebook, X (Twitter), LinkedIn
@@ -50,7 +50,12 @@ Book-a-consultation CTA → Related diseases/blog posts.
    consult your doctor before making changes."
 4. Remedy names are never self-medication advice — no dosages; medicines are chosen after
    individual consultation.
-5. Be honest about evidence in blog posts (study size, type, limitations).
+5. Be honest about evidence in blog posts (study size, type, limitations). Never state or
+   imply "studies show homeopathy is more effective than placebo" — our own research review
+   (`content/blog/homeopathy-research-honest-look.mdx`) found the opposite: NHS, the UK
+   Parliament Science and Technology Committee, and Australia's NHMRC all found no reliable
+   evidence of an effect beyond placebo. This claim appeared in the old site's doctor bio and
+   must not be reintroduced.
 6. Every disease page needs a red-flag / "seek urgent care" section.
 7. Avoid "best doctor" superlatives in our own copy — use "experienced".
 8. Doctor sign-off required before any medical page goes live.

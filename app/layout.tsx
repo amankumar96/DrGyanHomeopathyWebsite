@@ -20,7 +20,7 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "Dr. Gyan's Homeopathy | Treatment for Everyone",
   description:
-    "Homeopathic care in Vaishali, Ghaziabad from Dr. Gyanesh Sharma, BHMS, practising since 2005.",
+    "Homeopathic care in Vaishali, Ghaziabad from Dr. Gyanesh Sharma, BHMS, practising since 2003.",
 };
 
 export default function RootLayout({
