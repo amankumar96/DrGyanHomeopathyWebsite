@@ -32,20 +32,24 @@ theme, edit this file only — never hardcode a hex value or a `font-family` in 
 ## Components vs. pages
 
 - `app/**/page.tsx` — route-level composition only. Keep these thin.
-- `components/*.tsx` — reusable UI. `Header`, `Footer`, `Hero`, `Disclaimer`, `ComingSoon`
-  exist today. Still to be built (next milestones): `DiseaseCard`, `BlogCard`,
-  `AppointmentForm`, `SearchBar`, `Breadcrumbs`, `TestimonialCard` — add them here, not
-  inline in a page, since disease/blog listing and detail pages will reuse them.
+- `components/*.tsx` — reusable UI. `Header`, `Footer`, `Hero`, `Disclaimer`, `ComingSoon`,
+  `DiseaseCard` exist today. Still to be built: `BlogCard`, `AppointmentForm`, `SearchBar`,
+  `Breadcrumbs`, `TestimonialCard` — add them here, not inline in a page, so listing and
+  detail pages can reuse them.
 
-## Content pipeline (not yet built)
+## Content pipeline
 
-`content/diseases/*.mdx` and `content/blog/*.mdx` will hold one file per disease/post,
-frontmatter format defined in guide §6. The plan is a `lib/content.ts` module that reads
-and parses these files at build time (e.g. with `gray-matter` + `next-mdx-remote` or
-`@next/mdx`) and exposes typed getters (`getAllDiseases()`, `getDiseaseBySlug(slug)`,
-`getAllPosts()`, etc.) — pages call these getters, they never read the filesystem directly.
-This keeps the data-access pattern in one place so swapping the content source later (e.g.
-a CMS) only touches `lib/content.ts`.
+`lib/content.ts` is the only place in the app that touches the filesystem for content. It
+reads `content/diseases/*.mdx` / `content/blog/*.mdx` with `gray-matter` (frontmatter →
+typed object) and exposes `getAllDiseases()`, `getDiseaseBySlug(slug)`, `getAllBlogPosts()`,
+`getBlogPostBySlug(slug)`. Pages call these getters, never `fs` directly — if the content
+source ever changes (e.g. a CMS), only `lib/content.ts` changes.
+
+The MDX body (everything after frontmatter) is rendered with `next-mdx-remote/rsc`'s
+`<MDXRemote>` in `app/diseases/[slug]/page.tsx`, which maps raw markdown elements (`h2`,
+`p`, `ul`, etc.) to styled components inline in that file (`mdxComponents`). Frontmatter
+fields that aren't part of the free-form body — `faqs`, `sources`, quick facts — are
+rendered separately by the page itself, not through MDX.
 
 `research/` holds raw agent research briefs (markdown) that feed the content-writer agent —
 it is never read by the site itself, only by the content pipeline's authors/agents.
@@ -54,22 +58,27 @@ it is never read by the site itself, only by the content pipeline's authors/agen
 
 Guide §7 and §10 define seven Claude Code subagents (research → write → compliance-review →
 SEO → build → QA) living in `.claude/agents/`, plus custom skills in `.claude/skills/`
-(`disease-page`, `blog-post`, `brand-voice`). These are introduced once the content pipeline
-above exists, because the agents' whole job is to produce and review files in `content/` —
-there's nothing for them to operate on before that. When added, the per-disease pipeline is:
+(`disease-page`, `blog-post`, `brand-voice`). When added, the per-disease pipeline is:
 `disease-researcher → disease-content-writer → medical-compliance-reviewer → seo-agent →
-doctor review (PR) → merge`.
+doctor review (PR) → merge`. Until then, disease content is written directly (still
+following the same research-from-authoritative-sources and compliance rules in `CLAUDE.md`).
 
-## How to add a new disease page (future walkthrough)
+## How to add a new disease page
 
-This section will be filled in once `lib/content.ts` and the disease detail template exist.
-For now: a new disease is **not** a new route — `app/diseases/[slug]/page.tsx` already
-handles every slug dynamically. Adding a disease will mean adding one MDX file to
-`content/diseases/`, nothing else.
+A new disease is **not** a new route — `app/diseases/[slug]/page.tsx` already handles every
+slug dynamically via `generateStaticParams()`. Adding a disease means adding one MDX file to
+`content/diseases/`, following the frontmatter schema in guide §6 (see any existing file
+in that folder for a working example) and the 8-section body template in guide §5.4. The
+category also needs to already exist or it becomes a new filter pill automatically on
+`/diseases` — no code change needed either way. Every medical page must keep the red-flag
+section, the `<Disclaimer />` (rendered automatically by the detail page, not something you
+add to the MDX), and real `sources` URLs — see `CLAUDE.md` guardrails.
 
 ## Current milestone boundary
 
-What exists right now: project scaffold, design tokens, root layout, Header/Footer/Hero,
-a placeholder Home page, and "coming soon" stubs for every other route — enough that
-navigation and the visual theme are real, but no disease/blog content, forms, search,
-SEO schema, or agents yet. See the guide's §13 phase table for what's next.
+Built: project scaffold, design tokens, root layout, Header/Footer/Hero (using
+`public/images/BG.png` as a full-page fixed background), the trust-strip icons, and the
+Diseases section (content pipeline, list page with category filter, detail page template)
+with a handful of real, sourced disease pages. Still stubs: About, Blog, Contact, Search —
+no forms, no search implementation, no SEO schema, no agents/skills yet. See the guide's
+§13 phase table for what's next.
