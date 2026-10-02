@@ -6,12 +6,21 @@ import BlogCard from "@/components/BlogCard";
 import { getAllDiseases, getAllBlogPosts } from "@/lib/content";
 
 const TRUST_POINTS = [
-  { icon: "/images/icons/experience-icon.png", label: "Practising since 2003" },
+  {
+    icon: "/images/icons/experience-icon.png",
+    primary: "Practising since 2003",
+    secondary: "Years of trusted care",
+  },
   {
     icon: "/images/icons/qualification-icon.png",
-    label: "BHMS, National Homeopathic Medical College, Lucknow",
+    primary: "BHMS, National Homeopathic Medical College, Lucknow",
+    secondary: "Qualified & experienced",
   },
-  { icon: "/images/icons/holistic-care-icon.png", label: "Holistic, individualised consultations" },
+  {
+    icon: "/images/icons/holistic-care-icon.png",
+    primary: "Holistic, individualised consultations",
+    secondary: "Care for the whole you",
+  },
 ];
 
 const WHY_CHOOSE_US = [
@@ -29,17 +38,31 @@ export default function Home() {
     <>
       <Hero />
 
-      {/* Trust strip */}
-      <section className="px-4 py-8 md:px-6">
-        <div className="mx-auto flex max-w-6xl flex-col gap-8 rounded-2xl border border-leaf-200 bg-leaf-100/80 px-4 py-8 md:flex-row md:justify-center md:gap-16 md:px-6">
-          {TRUST_POINTS.map(({ icon, label }) => (
-            <div key={label} className="flex flex-col items-center gap-3 text-center">
-              <span className="flex h-16 w-16 items-center justify-center rounded-full bg-leaf-100 text-forest-800">
-                <Image src={icon} alt="" width={32} height={32} className="h-8 w-8 object-contain" />
-              </span>
-              <span className="max-w-[12rem] text-sm font-medium text-forest-800">{label}</span>
-            </div>
-          ))}
+      {/* Trust strip — one continuous banner, not separate cards */}
+      <section className="px-4 py-6 md:px-6">
+        <div className="mx-auto max-w-6xl rounded-3xl bg-leaf-50 px-6 py-2 md:px-10">
+          <div className="flex flex-col divide-y divide-[#D6E8CF]/60 md:flex-row md:items-center md:justify-center md:divide-x md:divide-y-0">
+            {TRUST_POINTS.map(({ icon, primary, secondary }) => (
+              <div
+                key={primary}
+                className="flex items-center gap-4 py-4 md:px-10 md:py-6 md:first:pl-0 md:last:pr-0"
+              >
+                <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-[#EAF5E5]">
+                  <Image
+                    src={icon}
+                    alt=""
+                    width={36}
+                    height={36}
+                    className="h-9 w-9 object-contain"
+                  />
+                </span>
+                <div className="text-left">
+                  <p className="text-base font-semibold text-forest-800 md:text-lg">{primary}</p>
+                  <p className="mt-0.5 text-sm text-ink/60">{secondary}</p>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
