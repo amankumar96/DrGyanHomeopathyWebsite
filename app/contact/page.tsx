@@ -83,14 +83,26 @@ export default function ContactPage() {
           </div>
 
           <div className="mt-6 flex gap-4 text-sm text-forest-600">
-            {/* TODO: swap for real social links once provided */}
-            <a href="#" aria-label="Facebook" className="hover:text-forest-800">
+            <a
+              href="https://www.facebook.com/Drgyans/"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Facebook"
+              className="hover:text-forest-800"
+            >
               Facebook
             </a>
+            {/* TODO: no X/Twitter link provided yet */}
             <a href="#" aria-label="X (Twitter)" className="hover:text-forest-800">
               X
             </a>
-            <a href="#" aria-label="LinkedIn" className="hover:text-forest-800">
+            <a
+              href="https://www.linkedin.com/in/gyanesh-sharma-5402a316b/"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="LinkedIn"
+              className="hover:text-forest-800"
+            >
               LinkedIn
             </a>
           </div>
