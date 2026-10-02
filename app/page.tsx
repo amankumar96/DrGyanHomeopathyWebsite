@@ -3,7 +3,7 @@ import Link from "next/link";
 import Hero from "@/components/Hero";
 import DiseaseCard from "@/components/DiseaseCard";
 import BlogCard from "@/components/BlogCard";
-import TestimonialCard from "@/components/TestimonialCard";
+import TestimonialsCarousel from "@/components/TestimonialsCarousel";
 import { getAllDiseases, getAllBlogPosts } from "@/lib/content";
 
 const TRUST_POINTS = [
@@ -176,10 +176,8 @@ export default function Home() {
           <h2 className="font-heading text-2xl font-semibold text-forest-800">
             What Our Patients Say
           </h2>
-          <div className="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {TESTIMONIALS.map((t) => (
-              <TestimonialCard key={t.name} {...t} />
-            ))}
+          <div className="mt-6">
+            <TestimonialsCarousel testimonials={TESTIMONIALS} />
           </div>
         </div>
       </section>
