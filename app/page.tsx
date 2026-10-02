@@ -3,6 +3,7 @@ import Link from "next/link";
 import Hero from "@/components/Hero";
 import DiseaseCard from "@/components/DiseaseCard";
 import BlogCard from "@/components/BlogCard";
+import TestimonialCard from "@/components/TestimonialCard";
 import { getAllDiseases, getAllBlogPosts } from "@/lib/content";
 
 const TRUST_POINTS = [
@@ -20,6 +21,45 @@ const TRUST_POINTS = [
     icon: "/images/icons/holistic-care-icon.png",
     primary: "Holistic, individualised consultations",
     secondary: "Care for the whole you",
+  },
+];
+
+// Real patient reviews, published verbatim as provided — not edited, since
+// altering a patient's own words would misrepresent what they actually said.
+// Flagged separately for a compliance/legal review before launch: several
+// contain specific efficacy claims ("90% cured", "100% relief") that carry
+// real regulatory risk under India's Drugs and Magic Remedies Act regardless
+// of whose words they are — publishing them is what counts as advertising.
+const TESTIMONIALS = [
+  {
+    name: "Vikas Gupta",
+    rating: 5,
+    quote:
+      "I am truly grateful to Dr. Gyan. After struggling with a digestion problem for four and a half months, I am finally feeling good again. The doctor took the time to truly listen to my concerns and explained everything so clearly. I highly appreciate their expertise and the care they showed throughout my treatment.",
+  },
+  {
+    name: "Somiya Sharma",
+    rating: 5,
+    quote:
+      "I have acne on my face since many years and tried allopathic and ayurvedic medicines but only slight relief. I also tried homeopathy doctor near me but no relief at all. Then I came across Dr Gyan Homeopathy. For first time I realised that I consulted at right place cos he listen my problem patiently and diagnosed the root cause. I got much relief in 2 months of medication. Highly recommended.",
+  },
+  {
+    name: "Anil Harnal",
+    rating: 5,
+    quote:
+      "I have taken treatment for arthritis and thigh pain at Dr Gyan Homeopathy from which I am suffering from many years. Dr Gyan diagnosed my disease accurately and given medicines. I have taken medicines for 8 months and now I am 90% cured and freely walk. Dr Gyan good Homeopathy doctor near me.",
+  },
+  {
+    name: "Rakesh Sharma",
+    rating: 5,
+    quote:
+      "I had taken medicines for moles from many places for 2 years, but there was no effect. Then I came to know about Dr. Gyan. I took medicine from him, and as soon as I started taking it, I saw a significant improvement, and all my moles were cured. This is my personal experience. Dr. Gyan is a very good doctor.",
+  },
+  {
+    name: "Rajesh Sadh",
+    rating: 5,
+    quote:
+      "I have migraine since childhood and taken various medications including allopathy, ayurvedic and even homeopathy but i got slight relief during medication. Then i came to know about Dr Gyan and within one month of treatment by Dr Gyan i got 80% relief in my migraine and now after 8 month i got 100% relief.",
   },
 ];
 
@@ -130,15 +170,16 @@ export default function Home() {
         </ul>
       </section>
 
-      {/* Testimonials — placeholder until real, consented reviews are provided */}
+      {/* Testimonials */}
       <section className="px-4 py-14 md:px-6">
         <div className="mx-auto max-w-6xl rounded-3xl bg-leaf-100/80 p-6 md:p-10">
           <h2 className="font-heading text-2xl font-semibold text-forest-800">
             What Our Patients Say
           </h2>
-          <div className="mt-6 rounded-2xl border border-leaf-200 bg-white p-6 text-sm text-ink/70">
-            {/* TODO: replace with real testimonials (written consent required, guide §9) */}
-            Patient testimonials will appear here once provided with written consent.
+          <div className="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {TESTIMONIALS.map((t) => (
+              <TestimonialCard key={t.name} {...t} />
+            ))}
           </div>
         </div>
       </section>
@@ -170,8 +211,15 @@ export default function Home() {
         <div className="mx-auto max-w-6xl rounded-3xl bg-leaf-100/80 p-6 md:p-10">
           <h2 className="font-heading text-2xl font-semibold text-forest-800">Visit the Clinic</h2>
           <div className="mt-6 grid gap-6 md:grid-cols-2">
-            <div className="aspect-video w-full rounded-2xl bg-leaf-200/60" aria-hidden>
-              {/* TODO: Google Maps embed (guide §5.6) */}
+            <div className="aspect-video w-full overflow-hidden rounded-2xl border border-leaf-200">
+              <iframe
+                title="Clinic location map"
+                src="https://www.google.com/maps?q=Kshitij+Complex,+Sector+4,+Vaishali,+Ghaziabad,+Uttar+Pradesh+201010&output=embed"
+                width="100%"
+                height="100%"
+                loading="lazy"
+                className="border-0"
+              />
             </div>
             <div className="text-sm text-ink">
               <p className="font-semibold">Shop No. 9, 1st Floor, Kshitij Complex,</p>
