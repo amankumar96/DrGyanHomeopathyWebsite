@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import SocialLinks from "./SocialLinks";
 
 export default function Footer() {
   return (
@@ -52,27 +53,8 @@ export default function Footer() {
               care@drgyanshomeopathy.com
             </a>
           </div>
-          <div className="mt-4 flex gap-4 text-sm text-leaf-100">
-            <a
-              href="https://www.facebook.com/Drgyans/"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Facebook"
-              className="hover:text-white"
-            >
-              Facebook
-            </a>
-            {/* TODO: no X/Twitter link provided yet */}
-            <a href="#" aria-label="X (Twitter)" className="hover:text-white">X</a>
-            <a
-              href="https://www.linkedin.com/in/gyanesh-sharma-5402a316b/"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="LinkedIn"
-              className="hover:text-white"
-            >
-              LinkedIn
-            </a>
+          <div className="mt-4">
+            <SocialLinks theme="dark" />
           </div>
         </div>
       </div>

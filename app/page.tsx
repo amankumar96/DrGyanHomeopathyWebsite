@@ -4,6 +4,7 @@ import Hero from "@/components/Hero";
 import DiseaseCard from "@/components/DiseaseCard";
 import BlogCard from "@/components/BlogCard";
 import TestimonialsCarousel from "@/components/TestimonialsCarousel";
+import SocialLinks from "@/components/SocialLinks";
 import { getAllDiseases, getAllBlogPosts } from "@/lib/content";
 
 const TRUST_POINTS = [
@@ -232,6 +233,9 @@ export default function Home() {
                   care@drgyanshomeopathy.com
                 </a>
               </p>
+              <div className="mt-4">
+                <SocialLinks />
+              </div>
             </div>
           </div>
         </div>

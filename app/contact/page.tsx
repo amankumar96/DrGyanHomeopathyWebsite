@@ -1,4 +1,5 @@
 import AppointmentForm from "@/components/AppointmentForm";
+import SocialLinks from "@/components/SocialLinks";
 
 export const metadata = {
   title: "Contact Us | Dr. Gyan's Homeopathy",
@@ -82,29 +83,8 @@ export default function ContactPage() {
             </a>
           </div>
 
-          <div className="mt-6 flex gap-4 text-sm text-forest-600">
-            <a
-              href="https://www.facebook.com/Drgyans/"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Facebook"
-              className="hover:text-forest-800"
-            >
-              Facebook
-            </a>
-            {/* TODO: no X/Twitter link provided yet */}
-            <a href="#" aria-label="X (Twitter)" className="hover:text-forest-800">
-              X
-            </a>
-            <a
-              href="https://www.linkedin.com/in/gyanesh-sharma-5402a316b/"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="LinkedIn"
-              className="hover:text-forest-800"
-            >
-              LinkedIn
-            </a>
+          <div className="mt-6">
+            <SocialLinks />
           </div>
         </div>
 
