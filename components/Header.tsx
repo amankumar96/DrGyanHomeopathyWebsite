@@ -3,10 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 
-const NAV_LINKS_AFTER_DISEASES = [
-  { href: "/blog", label: "Latest News" },
-  { href: "/contact", label: "Contact Us" },
-];
+const NAV_LINKS_AFTER_DISEASES = [{ href: "/blog", label: "Latest News" }];
 
 export type DiseaseNavEntry = { slug: string; title: string };
 export type DiseasesByCategory = Record<string, DiseaseNavEntry[]>;

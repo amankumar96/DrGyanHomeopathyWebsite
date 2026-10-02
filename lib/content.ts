@@ -115,3 +115,38 @@ export function getAllBlogPosts(): BlogPost[] {
 export function getBlogPostBySlug(slug: string): BlogPost | undefined {
   return getAllBlogPosts().find((post) => post.slug === slug);
 }
+
+export type SearchItem = {
+  type: "disease" | "blog";
+  slug: string;
+  title: string;
+  description: string;
+  category: string;
+  /** Full body text folded in so matches on symptoms etc. (not just the
+   * title/summary) still surface — see guide §18 ("Search: disease names,
+   * symptoms, blog titles"). */
+  searchText: string;
+};
+
+/** Combined client-searchable index of every disease + blog post. Built
+ * server-side (has filesystem access via the getters above) and passed as
+ * a prop into the search page's client component — see app/search/page.tsx. */
+export function getSearchIndex(): SearchItem[] {
+  const diseases: SearchItem[] = getAllDiseases().map((d) => ({
+    type: "disease",
+    slug: d.slug,
+    title: d.title,
+    description: d.summary,
+    category: d.category,
+    searchText: `${d.title} ${d.summary} ${d.category} ${d.content}`,
+  }));
+  const posts: SearchItem[] = getAllBlogPosts().map((p) => ({
+    type: "blog",
+    slug: p.slug,
+    title: p.title,
+    description: p.excerpt,
+    category: p.category,
+    searchText: `${p.title} ${p.excerpt} ${p.category} ${p.tags.join(" ")} ${p.content}`,
+  }));
+  return [...diseases, ...posts];
+}
