@@ -45,6 +45,7 @@ export default function AppointmentForm() {
           required
           value={name}
           onChange={(e) => setName(e.target.value)}
+          suppressHydrationWarning
           className="mt-1 w-full rounded-xl border border-leaf-200 bg-white px-4 py-2.5 text-sm text-ink focus:border-forest-600 focus:outline-none focus:ring-1 focus:ring-forest-600"
         />
       </div>
@@ -59,6 +60,7 @@ export default function AppointmentForm() {
           required
           value={phone}
           onChange={(e) => setPhone(e.target.value)}
+          suppressHydrationWarning
           className="mt-1 w-full rounded-xl border border-leaf-200 bg-white px-4 py-2.5 text-sm text-ink focus:border-forest-600 focus:outline-none focus:ring-1 focus:ring-forest-600"
         />
       </div>
@@ -72,6 +74,7 @@ export default function AppointmentForm() {
           type="date"
           value={preferredDate}
           onChange={(e) => setPreferredDate(e.target.value)}
+          suppressHydrationWarning
           className="mt-1 w-full rounded-xl border border-leaf-200 bg-white px-4 py-2.5 text-sm text-ink focus:border-forest-600 focus:outline-none focus:ring-1 focus:ring-forest-600"
         />
       </div>
@@ -87,12 +90,14 @@ export default function AppointmentForm() {
           value={concern}
           onChange={(e) => setConcern(e.target.value)}
           placeholder="Briefly describe what you'd like to discuss"
+          suppressHydrationWarning
           className="mt-1 w-full rounded-xl border border-leaf-200 bg-white px-4 py-2.5 text-sm text-ink focus:border-forest-600 focus:outline-none focus:ring-1 focus:ring-forest-600"
         />
       </div>
 
       <button
         type="submit"
+        suppressHydrationWarning
         className="mt-2 rounded-full bg-forest-600 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-forest-800"
       >
         Send via WhatsApp
