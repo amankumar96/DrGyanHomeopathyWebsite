@@ -5,7 +5,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import PageBackground from "@/components/PageBackground";
 import WhatsAppButton from "@/components/WhatsAppButton";
-import { getDiseaseCategoryMenu } from "@/lib/content";
+import { getDiseaseCategoryMenu, getDiseaseSearchIndex } from "@/lib/content";
 
 const fraunces = Fraunces({
   variable: "--font-fraunces",
@@ -30,12 +30,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   const diseaseCategories = getDiseaseCategoryMenu();
+  const diseaseSearchIndex = getDiseaseSearchIndex();
 
   return (
     <html lang="en">
       <body className={`${fraunces.variable} ${inter.variable} antialiased`}>
         <PageBackground />
-        <Header diseaseCategories={diseaseCategories} />
+        <Header diseaseCategories={diseaseCategories} diseaseSearchIndex={diseaseSearchIndex} />
         {/* pb-6/10 guarantees clearance above the footer's tree-line decoration
             (see components/Footer.tsx) regardless of a page's own last-section
             padding, so content can never end flush against the footer. */}

@@ -106,9 +106,46 @@ export function getDiseaseBySlug(slug: string): Disease | undefined {
   return getAllDiseases().find((disease) => disease.slug === slug);
 }
 
+export type CategoryMergeGroup = {
+  /** Display name shown in the nav menu and /diseases pills. */
+  name: string;
+  /** Raw `Disease.category` values (as written in MDX frontmatter) folded
+   * into this group. Most entries are 1:1 passthroughs; a few combine two
+   * related raw categories (e.g. Skin + Hair) into one display category. */
+  sourceCategories: string[];
+};
+
+/** Maps the 16 raw disease categories onto 13 user-facing display
+ * categories for the nav mega-menu and /diseases filter pills. Edit this
+ * array (not the MDX files) to change the menu's taxonomy — see
+ * components/Header.tsx and app/diseases/page.tsx, both of which build
+ * `?category=<sourceCategories joined by comma>` links from it. */
+export const CATEGORY_MERGE_GROUPS: CategoryMergeGroup[] = [
+  { name: "Skin & Hair", sourceCategories: ["Skin", "Hair"] },
+  {
+    name: "Brain, Neurological & Mental Wellness",
+    sourceCategories: ["Neurological", "Mental Wellness"],
+  },
+  { name: "Eye & Ear Care", sourceCategories: ["Eye Care", "Ear Care"] },
+  { name: "Digestive", sourceCategories: ["Digestive"] },
+  { name: "Respiratory", sourceCategories: ["Respiratory"] },
+  { name: "Joints & Muscles", sourceCategories: ["Joints"] },
+  { name: "Heart & Circulation", sourceCategories: ["Heart & Circulation"] },
+  { name: "Endocrine", sourceCategories: ["Endocrine"] },
+  { name: "Kidney & Urinary", sourceCategories: ["Kidney & Urinary"] },
+  { name: "Women's Health", sourceCategories: ["Women's Health"] },
+  { name: "Men's Health", sourceCategories: ["Men's Health"] },
+  { name: "Child Health", sourceCategories: ["Child Health"] },
+  { name: "General Health", sourceCategories: ["General Health"] },
+];
+
 export type DiseaseCategoryMenuItem = {
   name: string;
-  /** Capped, alphabetical (inherits getAllDiseases()'s title sort). */
+  /** Raw categories folded into this entry — needed to build the
+   * comma-separated `?category=` link for merged groups (never link using
+   * `name`, which is a display label, not a real `Disease.category` value). */
+  sourceCategories: string[];
+  /** Capped, alphabetical (re-sorted after combining source categories). */
   diseases: { slug: string; title: string }[];
   /** Full count in this category, for "View all X (N)" links. */
   totalCount: number;
@@ -116,24 +153,39 @@ export type DiseaseCategoryMenuItem = {
 
 const DISEASE_MENU_CAP = 6;
 
-/** Diseases grouped by category for the nav mega-menu: capped per category
- * (smallest real categories are 1-3 items, so the cap only trims the ~10
- * categories that actually need it) and ordered by total size, most content
- * first — a simple, non-medical-claim ordering. See components/Header.tsx. */
+/** Diseases grouped by merged display category for the nav mega-menu:
+ * capped per category and ordered by total size, most content first — a
+ * simple, non-medical-claim ordering. See components/Header.tsx. */
 export function getDiseaseCategoryMenu(): DiseaseCategoryMenuItem[] {
-  const grouped: Record<string, { slug: string; title: string }[]> = {};
+  const byCategory: Record<string, { slug: string; title: string }[]> = {};
   for (const disease of getAllDiseases()) {
-    grouped[disease.category] ??= [];
-    grouped[disease.category].push({ slug: disease.slug, title: disease.title });
+    byCategory[disease.category] ??= [];
+    byCategory[disease.category].push({ slug: disease.slug, title: disease.title });
   }
 
-  return Object.entries(grouped)
-    .map(([name, diseases]) => ({
-      name,
-      totalCount: diseases.length,
-      diseases: diseases.slice(0, DISEASE_MENU_CAP),
-    }))
-    .sort((a, b) => b.totalCount - a.totalCount);
+  return CATEGORY_MERGE_GROUPS.map((group) => {
+    // Re-sort after combining — concatenating two already-sorted lists
+    // (e.g. Skin + Hair) does not stay alphabetically sorted.
+    const combined = group.sourceCategories
+      .flatMap((raw) => byCategory[raw] ?? [])
+      .sort((a, b) => a.title.localeCompare(b.title));
+    return {
+      name: group.name,
+      sourceCategories: group.sourceCategories,
+      totalCount: combined.length,
+      diseases: combined.slice(0, DISEASE_MENU_CAP),
+    };
+  }).sort((a, b) => b.totalCount - a.totalCount);
+}
+
+export type DiseaseSearchIndexItem = { slug: string; title: string; category: string };
+
+/** Lightweight disease-only index for the nav dropdown's live search box —
+ * distinct from getSearchIndex() below (used by /search), which folds in
+ * full MDX body text and is too heavy to ship into the global layout
+ * bundle that every page pays for via app/layout.tsx. */
+export function getDiseaseSearchIndex(): DiseaseSearchIndexItem[] {
+  return getAllDiseases().map((d) => ({ slug: d.slug, title: d.title, category: d.category }));
 }
 
 export function getAllBlogPosts(): BlogPost[] {
