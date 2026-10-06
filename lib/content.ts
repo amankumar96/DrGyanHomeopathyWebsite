@@ -106,6 +106,36 @@ export function getDiseaseBySlug(slug: string): Disease | undefined {
   return getAllDiseases().find((disease) => disease.slug === slug);
 }
 
+export type DiseaseCategoryMenuItem = {
+  name: string;
+  /** Capped, alphabetical (inherits getAllDiseases()'s title sort). */
+  diseases: { slug: string; title: string }[];
+  /** Full count in this category, for "View all X (N)" links. */
+  totalCount: number;
+};
+
+const DISEASE_MENU_CAP = 6;
+
+/** Diseases grouped by category for the nav mega-menu: capped per category
+ * (smallest real categories are 1-3 items, so the cap only trims the ~10
+ * categories that actually need it) and ordered by total size, most content
+ * first — a simple, non-medical-claim ordering. See components/Header.tsx. */
+export function getDiseaseCategoryMenu(): DiseaseCategoryMenuItem[] {
+  const grouped: Record<string, { slug: string; title: string }[]> = {};
+  for (const disease of getAllDiseases()) {
+    grouped[disease.category] ??= [];
+    grouped[disease.category].push({ slug: disease.slug, title: disease.title });
+  }
+
+  return Object.entries(grouped)
+    .map(([name, diseases]) => ({
+      name,
+      totalCount: diseases.length,
+      diseases: diseases.slice(0, DISEASE_MENU_CAP),
+    }))
+    .sort((a, b) => b.totalCount - a.totalCount);
+}
+
 export function getAllBlogPosts(): BlogPost[] {
   return readMdxDir<BlogFrontmatter>(BLOG_DIR).sort(
     (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),

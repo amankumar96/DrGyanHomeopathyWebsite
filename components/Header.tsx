@@ -2,20 +2,17 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import type { DiseaseCategoryMenuItem } from "@/lib/content";
 
 const NAV_LINKS_AFTER_DISEASES = [{ href: "/blog", label: "Latest News" }];
 
-export type DiseaseNavEntry = { slug: string; title: string };
-export type DiseasesByCategory = Record<string, DiseaseNavEntry[]>;
-
 export default function Header({
-  diseasesByCategory,
+  diseaseCategories,
 }: {
-  diseasesByCategory: DiseasesByCategory;
+  diseaseCategories: DiseaseCategoryMenuItem[];
 }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [mobileDiseasesOpen, setMobileDiseasesOpen] = useState(false);
-  const categories = Object.keys(diseasesByCategory).sort();
 
   return (
     <header className="sticky top-0 z-50 border-b border-leaf-200 bg-leaf-50/90 backdrop-blur">
@@ -44,16 +41,16 @@ export default function Header({
               </svg>
             </Link>
 
-            {categories.length > 0 && (
-              <div className="invisible absolute left-1/2 top-full z-50 w-[640px] -translate-x-1/2 pt-3 opacity-0 transition-opacity group-hover:visible group-hover:opacity-100">
-                <div className="grid max-h-[70vh] grid-cols-3 gap-x-6 gap-y-4 overflow-y-auto rounded-2xl border border-leaf-200 bg-white p-6 shadow-lg">
-                  {categories.map((category) => (
-                    <div key={category}>
+            {diseaseCategories.length > 0 && (
+              <div className="invisible absolute left-1/2 top-full z-50 w-[90vw] max-w-[920px] -translate-x-1/2 pt-3 opacity-0 transition-opacity group-hover:visible group-hover:opacity-100">
+                <div className="grid max-h-[80vh] grid-cols-3 gap-x-6 gap-y-6 overflow-y-auto rounded-2xl border border-leaf-200 bg-white p-6 shadow-lg lg:grid-cols-4">
+                  {diseaseCategories.map((category) => (
+                    <div key={category.name}>
                       <p className="text-xs font-semibold uppercase tracking-wide text-forest-600">
-                        {category}
+                        {category.name}
                       </p>
                       <ul className="mt-2 space-y-1.5">
-                        {diseasesByCategory[category].map((disease) => (
+                        {category.diseases.map((disease) => (
                           <li key={disease.slug}>
                             <Link
                               href={`/diseases/${disease.slug}`}
@@ -64,6 +61,14 @@ export default function Header({
                           </li>
                         ))}
                       </ul>
+                      {category.totalCount > category.diseases.length && (
+                        <Link
+                          href={`/diseases?category=${encodeURIComponent(category.name)}`}
+                          className="mt-2 inline-block text-xs font-semibold text-forest-600 hover:text-forest-800"
+                        >
+                          View all {category.name} ({category.totalCount}) →
+                        </Link>
+                      )}
                     </div>
                   ))}
                 </div>
@@ -136,13 +141,13 @@ export default function Header({
             </button>
             {mobileDiseasesOpen && (
               <div className="ml-2 border-l border-leaf-200 pl-3">
-                {categories.map((category) => (
-                  <div key={category} className="py-2">
+                {diseaseCategories.map((category) => (
+                  <div key={category.name} className="py-2">
                     <p className="text-xs font-semibold uppercase tracking-wide text-forest-600">
-                      {category}
+                      {category.name}
                     </p>
                     <ul className="mt-1 space-y-1">
-                      {diseasesByCategory[category].map((disease) => (
+                      {category.diseases.map((disease) => (
                         <li key={disease.slug}>
                           <Link
                             href={`/diseases/${disease.slug}`}
@@ -154,6 +159,15 @@ export default function Header({
                         </li>
                       ))}
                     </ul>
+                    {category.totalCount > category.diseases.length && (
+                      <Link
+                        href={`/diseases?category=${encodeURIComponent(category.name)}`}
+                        className="mt-1 block px-2 py-1 text-xs font-semibold text-forest-600"
+                        onClick={() => setMenuOpen(false)}
+                      >
+                        View all {category.name} ({category.totalCount}) →
+                      </Link>
+                    )}
                   </div>
                 ))}
               </div>
