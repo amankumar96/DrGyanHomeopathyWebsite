@@ -1,6 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import matter from "gray-matter";
+import { cache } from "react";
 
 /**
  * MDX content loader — the only place in the app that touches the filesystem
@@ -93,14 +94,19 @@ function readMdxDir<T>(dir: string): Array<T & { content: string }> {
     });
 }
 
-export function getAllDiseases(): Disease[] {
+/** Wrapped in React's cache() so the 163 MDX files are read from disk once
+ * per render pass, not once per caller — getDiseaseBySlug, getDiseaseCategoryMenu,
+ * getDiseaseSearchIndex, and getSearchIndex all call this independently, and
+ * without this a single disease page build could re-read the whole content
+ * directory 4-5 times. See Documents/disease-page-caching-and-domain-plan.md. */
+export const getAllDiseases = cache((): Disease[] => {
   return readMdxDir<DiseaseFrontmatter>(DISEASES_DIR)
     .map((disease) => ({
       ...disease,
       resolvedImage: resolveDiseaseImage(disease.slug),
     }))
     .sort((a, b) => a.title.localeCompare(b.title));
-}
+});
 
 export function getDiseaseBySlug(slug: string): Disease | undefined {
   return getAllDiseases().find((disease) => disease.slug === slug);
@@ -188,11 +194,12 @@ export function getDiseaseSearchIndex(): DiseaseSearchIndexItem[] {
   return getAllDiseases().map((d) => ({ slug: d.slug, title: d.title, category: d.category }));
 }
 
-export function getAllBlogPosts(): BlogPost[] {
+/** Same cache() treatment as getAllDiseases() — see note there. */
+export const getAllBlogPosts = cache((): BlogPost[] => {
   return readMdxDir<BlogFrontmatter>(BLOG_DIR).sort(
     (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
   );
-}
+});
 
 export function getBlogPostBySlug(slug: string): BlogPost | undefined {
   return getAllBlogPosts().find((post) => post.slug === slug);
