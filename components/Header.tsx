@@ -2,8 +2,8 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useMemo, useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { useMemo, useRef, useState } from "react";
 import Fuse from "fuse.js";
 import type { DiseaseCategoryMenuItem, DiseaseSearchIndexItem } from "@/lib/content";
 
@@ -129,9 +129,44 @@ export default function Header({
   diseaseSearchIndex: DiseaseSearchIndexItem[];
 }) {
   const router = useRouter();
+  const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
   const [mobileDiseasesOpen, setMobileDiseasesOpen] = useState(false);
   const [menuQuery, setMenuQuery] = useState("");
+  const [desktopDiseasesOpen, setDesktopDiseasesOpen] = useState(false);
+  const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Pure CSS :hover doesn't know when a client-side navigation happens —
+  // clicking a disease link leaves the cursor sitting over the panel, so
+  // without this the dropdown stayed visibly open on the destination page
+  // until the mouse moved. Close everything whenever the route changes.
+  // Adjusted during render (React's recommended pattern for "reset state
+  // when a prop changes") rather than in a useEffect, so it takes effect
+  // in the same render as the navigation instead of one tick later.
+  const [lastPathname, setLastPathname] = useState(pathname);
+  if (pathname !== lastPathname) {
+    setLastPathname(pathname);
+    setDesktopDiseasesOpen(false);
+    setMenuOpen(false);
+    setMobileDiseasesOpen(false);
+    setMenuQuery("");
+  }
+
+  const openDesktopDiseases = () => {
+    if (closeTimer.current) clearTimeout(closeTimer.current);
+    setDesktopDiseasesOpen(true);
+  };
+
+  // Small delay before closing so moving the cursor from the "Diseases"
+  // trigger down into the wide panel — which, now that it's centered on the
+  // viewport instead of anchored under the trigger, isn't always a
+  // straight line — doesn't drop hover and close the menu mid-move.
+  const scheduleCloseDesktopDiseases = () => {
+    closeTimer.current = setTimeout(() => {
+      setDesktopDiseasesOpen(false);
+      setMenuQuery("");
+    }, 250);
+  };
 
   const totalDiseaseCount = useMemo(
     () => diseaseCategories.reduce((sum, c) => sum + c.totalCount, 0),
@@ -189,15 +224,15 @@ export default function Header({
           </Link>
 
           {/* Diseases — hover mega-menu: search + merged category cards.
-              No `relative` here deliberately — the panel below needs to
-              center on the viewport via the header row's wider `relative`
-              container above, not on this small trigger's own position
-              (which sits off-center in the nav and would clip a ~1560px
-              panel off the side of the screen if used as the anchor). */}
-          <div
-            className="group"
-            onMouseLeave={() => setMenuQuery("")}
-          >
+              Open/close is JS-controlled (not pure CSS group-hover): the
+              panel centers on the viewport via the header row's wider
+              `relative` container above, not under this small trigger, so
+              a plain CSS hover gap between the two would drop the hover
+              state before the cursor reaches the panel. A short close
+              delay plus an explicit close-on-navigate effect (above) fixes
+              both the hover-gap flicker and the panel staying open after
+              clicking a disease link. */}
+          <div onMouseEnter={openDesktopDiseases} onMouseLeave={scheduleCloseDesktopDiseases}>
             <Link
               href="/diseases"
               className="flex items-center gap-1 text-sm font-medium text-ink transition-colors hover:text-forest-600"
@@ -209,7 +244,11 @@ export default function Header({
             </Link>
 
             {diseaseCategories.length > 0 && (
-              <div className="invisible absolute left-1/2 top-full z-50 w-[92vw] max-w-[1560px] -translate-x-1/2 pt-3 opacity-0 transition-opacity group-hover:visible group-hover:opacity-100">
+              <div
+                className={`absolute left-1/2 top-full z-50 w-[92vw] max-w-[1560px] -translate-x-1/2 pt-3 transition-opacity ${
+                  desktopDiseasesOpen ? "visible opacity-100" : "invisible opacity-0"
+                }`}
+              >
                 <div className="max-h-[80vh] overflow-y-auto rounded-2xl border border-leaf-200 bg-white p-6 shadow-lg">
                   <div className="flex flex-wrap items-center gap-4 border-b border-leaf-200 pb-4">
                     <input
