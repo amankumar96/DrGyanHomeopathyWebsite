@@ -72,21 +72,37 @@ export default async function DiseaseDetailPage({
         {disease.title}
       </h1>
 
-      <div className="relative mt-6 aspect-[16/9] w-full overflow-hidden rounded-2xl bg-leaf-200/60">
-        {disease.resolvedImage ? (
+      {disease.resolvedImages.length === 0 ? (
+        <div className="relative mt-6 aspect-[16/9] w-full overflow-hidden rounded-2xl bg-leaf-200/60">
+          <span className="absolute inset-0 flex items-center justify-center text-center text-sm text-forest-800/50">
+            Image coming soon
+          </span>
+        </div>
+      ) : disease.resolvedImages.length === 1 ? (
+        <div className="relative mt-6 aspect-[16/9] w-full overflow-hidden rounded-2xl bg-leaf-200/60">
           <Image
-            src={disease.resolvedImage}
+            src={disease.resolvedImages[0]}
             alt={disease.imageAlt}
             fill
             priority
             className="object-cover"
           />
-        ) : (
-          <span className="absolute inset-0 flex items-center justify-center text-center text-sm text-forest-800/50">
-            Image coming soon
-          </span>
-        )}
-      </div>
+        </div>
+      ) : (
+        <div className="mt-6 grid grid-cols-2 gap-2 overflow-hidden rounded-2xl">
+          {disease.resolvedImages.map((src, i) => (
+            <div key={src} className="relative aspect-square w-full bg-leaf-200/60">
+              <Image
+                src={src}
+                alt={i === 0 ? disease.imageAlt : `${disease.imageAlt} (photo ${i + 1})`}
+                fill
+                priority={i === 0}
+                className="object-cover"
+              />
+            </div>
+          ))}
+        </div>
+      )}
 
       <div className="mt-4 flex flex-wrap gap-3 rounded-2xl border border-leaf-200 bg-leaf-100/80 p-4 text-sm text-forest-800">
         <span>

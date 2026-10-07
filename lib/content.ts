@@ -14,11 +14,13 @@ const BLOG_DIR = path.join(process.cwd(), "content/blog");
 
 const IMAGE_EXTENSIONS = new Set([".webp", ".jpg", ".jpeg", ".png"]);
 
+const MAX_DISEASE_IMAGES = 4;
+
 /**
  * Each disease has its own folder (public/images/diseases/<slug>/) — drop
- * any image file in there, any filename, and it's picked up automatically;
- * no renaming to match the slug required. If more than one image is
- * present, the alphabetically-first one wins.
+ * up to 4 image files in there, any filenames, and they're picked up
+ * automatically in alphabetical order (so name them 1.jpg, 2.jpg... to
+ * control display order); no renaming to match the slug required.
  *
  * The path is built inline (not passed through a shared helper with a `dir`
  * parameter) so Turbopack can statically trace it to this one subfolder —
@@ -28,14 +30,15 @@ const IMAGE_EXTENSIONS = new Set([".webp", ".jpg", ".jpeg", ".png"]);
  * Blog posts deliberately don't have an equivalent — Latest News cards are
  * text-only by design, no image slot.
  */
-function resolveDiseaseImage(slug: string): string | null {
+function resolveDiseaseImages(slug: string): string[] {
   const dir = path.join(process.cwd(), "public/images/diseases", slug);
-  if (!fs.existsSync(dir)) return null;
-  const file = fs
+  if (!fs.existsSync(dir)) return [];
+  return fs
     .readdirSync(dir)
     .filter((f) => IMAGE_EXTENSIONS.has(path.extname(f).toLowerCase()))
-    .sort()[0];
-  return file ? `/images/diseases/${slug}/${file}` : null;
+    .sort()
+    .slice(0, MAX_DISEASE_IMAGES)
+    .map((file) => `/images/diseases/${slug}/${file}`);
 }
 
 export type Faq = {
@@ -61,8 +64,9 @@ export type DiseaseFrontmatter = {
 
 export type Disease = DiseaseFrontmatter & {
   content: string;
-  /** Public URL if an uploaded image exists for this slug, else null (render a placeholder). */
-  resolvedImage: string | null;
+  /** Public URLs of uploaded images for this slug, up to 4, in display
+   * order. Empty array if none (render a placeholder). */
+  resolvedImages: string[];
 };
 
 export type BlogFrontmatter = {
@@ -103,7 +107,7 @@ export const getAllDiseases = cache((): Disease[] => {
   return readMdxDir<DiseaseFrontmatter>(DISEASES_DIR)
     .map((disease) => ({
       ...disease,
-      resolvedImage: resolveDiseaseImage(disease.slug),
+      resolvedImages: resolveDiseaseImages(disease.slug),
     }))
     .sort((a, b) => a.title.localeCompare(b.title));
 });
