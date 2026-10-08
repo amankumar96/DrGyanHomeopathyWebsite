@@ -1,9 +1,28 @@
+import Image from "next/image";
 import Link from "next/link";
+import SocialLinks from "./SocialLinks";
 
 export default function Footer() {
   return (
-    <footer className="bg-forest-800 text-leaf-50">
-      <div className="mx-auto grid max-w-6xl gap-8 px-4 py-10 md:grid-cols-3 md:px-6">
+    <footer className="relative bg-forest-800 text-leaf-50">
+      {/* Tree-line silhouette straddling the footer's top edge (guide §3.4) — canopies
+          read against the light page background above; trunks fade into the footer.
+          Fixed, bounded height (not width-driven) so it can never grow tall enough
+          to reach up into page content above — guide §29. Kept well inside the
+          smallest bottom padding any page section uses above the footer (py-10/
+          2.5rem+), so it can never collide with the last section's content even
+          on short pages. See app/layout.tsx for the matching pb-* on <main>. */}
+      <div className="pointer-events-none absolute left-0 right-0 top-0 h-12 -translate-y-6 overflow-hidden opacity-90 md:h-20 md:-translate-y-10">
+        <Image
+          src="/images/footer-treeline.png"
+          alt=""
+          aria-hidden="true"
+          fill
+          className="object-cover object-bottom"
+        />
+      </div>
+
+      <div className="relative mx-auto grid max-w-6xl gap-8 px-4 py-10 md:grid-cols-3 md:px-6">
         <div>
           <p className="font-heading text-lg font-semibold">Dr. Gyan&apos;s Homeopathy</p>
           <p className="mt-1 text-sm text-leaf-200">Treatment for Everyone</p>
@@ -34,11 +53,8 @@ export default function Footer() {
               care@drgyanshomeopathy.com
             </a>
           </div>
-          <div className="mt-4 flex gap-4 text-sm text-leaf-100">
-            {/* TODO: swap for real social links once provided */}
-            <a href="#" aria-label="Facebook" className="hover:text-white">Facebook</a>
-            <a href="#" aria-label="X (Twitter)" className="hover:text-white">X</a>
-            <a href="#" aria-label="LinkedIn" className="hover:text-white">LinkedIn</a>
+          <div className="mt-4">
+            <SocialLinks theme="dark" />
           </div>
         </div>
       </div>

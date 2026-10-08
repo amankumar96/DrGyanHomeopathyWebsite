@@ -3,6 +3,9 @@ import { Fraunces, Inter } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import PageBackground from "@/components/PageBackground";
+import WhatsAppButton from "@/components/WhatsAppButton";
+import { getDiseaseCategoryMenu } from "@/lib/content";
 
 const fraunces = Fraunces({
   variable: "--font-fraunces",
@@ -18,7 +21,7 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "Dr. Gyan's Homeopathy | Treatment for Everyone",
   description:
-    "Homeopathic care in Vaishali, Ghaziabad from Dr. Gyanesh Sharma, BHMS, practising since 2005.",
+    "Homeopathic care in Vaishali, Ghaziabad from Dr. Gyanesh Sharma, BHMS, practising since 2003.",
 };
 
 export default function RootLayout({
@@ -26,12 +29,19 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const diseaseCategories = getDiseaseCategoryMenu();
+
   return (
     <html lang="en">
       <body className={`${fraunces.variable} ${inter.variable} antialiased`}>
-        <Header />
-        <main>{children}</main>
+        <PageBackground />
+        <Header diseaseCategories={diseaseCategories} />
+        {/* pb-6/10 guarantees clearance above the footer's tree-line decoration
+            (see components/Footer.tsx) regardless of a page's own last-section
+            padding, so content can never end flush against the footer. */}
+        <main className="pb-6 md:pb-10">{children}</main>
         <Footer />
+        <WhatsAppButton />
       </body>
     </html>
   );
