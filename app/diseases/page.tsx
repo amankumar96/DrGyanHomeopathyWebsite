@@ -3,9 +3,9 @@ import { getAllDiseases, CATEGORY_MERGE_GROUPS } from "@/lib/content";
 import DiseaseCard from "@/components/DiseaseCard";
 
 export const metadata = {
-  title: "Conditions We Treat | Dr. Gyan's Homeopathy",
+  title: "Conditions We Treat | Dr Gyan Homeopathy",
   description:
-    "Browse the conditions Dr. Gyan's Homeopathy treats, from skin and respiratory health to women's and child health.",
+    "Browse the conditions Dr Gyan Homeopathy treats, from skin and respiratory health to women's and child health.",
 };
 
 export default async function DiseasesPage({

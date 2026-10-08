@@ -212,7 +212,7 @@ export default function Header({
     <header className="sticky top-0 z-50 border-b border-leaf-200 bg-leaf-50/90 backdrop-blur">
       <div className="relative mx-auto flex max-w-6xl items-center justify-between px-4 py-3 md:px-6">
         <Link href="/" className="font-heading text-lg font-semibold text-forest-800 md:text-xl">
-          Dr. Gyan&apos;s Homeopathy
+          Dr Gyan Homeopathy
         </Link>
 
         <nav className="hidden items-center gap-6 md:flex">

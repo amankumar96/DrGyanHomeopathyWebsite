@@ -1,7 +1,7 @@
 import Disclaimer from "@/components/Disclaimer";
 
 export const metadata = {
-  title: "About Dr. Gyanesh Sharma | Dr. Gyan's Homeopathy",
+  title: "About Dr. Gyanesh Sharma | Dr Gyan Homeopathy",
   description:
     "Dr. Gyanesh Sharma, BHMS, practising homeopathy in Vaishali, Ghaziabad since 2003.",
 };

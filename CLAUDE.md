@@ -1,4 +1,4 @@
-# CLAUDE.md — Dr. Gyan's Homeopathy Website
+# CLAUDE.md — Dr Gyan Homeopathy Website
 
 Project rules for any agent or developer (human or AI) working in this repo.
 Full build guide: `dr-gyan-homeopathy-website-guide.md` at the repo root (if present) —
@@ -6,7 +6,7 @@ this file is the condensed, load-bearing subset: facts and rules that must not d
 
 ## Clinic facts
 
-- Clinic: Dr. Gyan's Homeopathy — Tagline: "Treatment for Everyone"
+- Clinic: Dr Gyan Homeopathy — Tagline: "Treatment for Everyone"
 - Doctor: Dr. Gyanesh Sharma, BHMS (National Homeopathic Medical College, Lucknow, UP)
 - Practising since 2003 (Lucknow, now Vaishali, Ghaziabad)
 - Address: Shop No. 9, 1st Floor, Kshitij Complex, Sector 4, Vaishali, Ghaziabad, UP 201010

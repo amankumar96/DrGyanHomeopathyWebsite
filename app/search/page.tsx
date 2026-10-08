@@ -3,8 +3,8 @@ import { getSearchIndex } from "@/lib/content";
 import SearchClient from "@/components/SearchClient";
 
 export const metadata = {
-  title: "Search | Dr. Gyan's Homeopathy",
-  description: "Search conditions treated and the latest news from Dr. Gyan's Homeopathy.",
+  title: "Search | Dr Gyan Homeopathy",
+  description: "Search conditions treated and the latest news from Dr Gyan Homeopathy.",
 };
 
 export default function SearchPage() {

@@ -2,9 +2,9 @@ import AppointmentForm from "@/components/AppointmentForm";
 import SocialLinks from "@/components/SocialLinks";
 
 export const metadata = {
-  title: "Contact Us | Dr. Gyan's Homeopathy",
+  title: "Contact Us | Dr Gyan Homeopathy",
   description:
-    "Get in touch with Dr. Gyan's Homeopathy in Vaishali, Ghaziabad — call, WhatsApp, or book an appointment online.",
+    "Get in touch with Dr Gyan Homeopathy in Vaishali, Ghaziabad — call, WhatsApp, or book an appointment online.",
 };
 
 export default function ContactPage() {

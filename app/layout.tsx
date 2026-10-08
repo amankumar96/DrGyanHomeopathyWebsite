@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Fraunces, Inter } from "next/font/google";
+import { Fraunces, Inter, Noto_Sans_Devanagari } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -18,8 +18,18 @@ const inter = Inter({
   subsets: ["latin"],
 });
 
+// Used only for the Hindi/Devanagari portion of a disease page's H1
+// (see app/diseases/[slug]/page.tsx) — Fraunces and Inter don't cover
+// Devanagari, so without this the script would fall back to whatever
+// font (if any) the visitor's own system happens to provide.
+const notoDevanagari = Noto_Sans_Devanagari({
+  variable: "--font-noto-devanagari",
+  subsets: ["devanagari"],
+  weight: ["500", "600"],
+});
+
 export const metadata: Metadata = {
-  title: "Dr. Gyan's Homeopathy | Treatment for Everyone",
+  title: "Dr Gyan Homeopathy | Treatment for Everyone",
   description:
     "Homeopathic care in Vaishali, Ghaziabad from Dr. Gyanesh Sharma, BHMS, practising since 2003.",
 };
@@ -34,7 +44,9 @@ export default function RootLayout({
 
   return (
     <html lang="en">
-      <body className={`${fraunces.variable} ${inter.variable} antialiased`}>
+      <body
+        className={`${fraunces.variable} ${inter.variable} ${notoDevanagari.variable} antialiased`}
+      >
         <PageBackground />
         <Header diseaseCategories={diseaseCategories} diseaseSearchIndex={diseaseSearchIndex} />
         {/* pb-6/10 guarantees clearance above the footer's tree-line decoration

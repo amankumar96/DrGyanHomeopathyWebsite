@@ -24,7 +24,7 @@ export default function Footer() {
 
       <div className="relative mx-auto grid max-w-6xl gap-8 px-4 py-10 md:grid-cols-3 md:px-6">
         <div>
-          <p className="font-heading text-lg font-semibold">Dr. Gyan&apos;s Homeopathy</p>
+          <p className="font-heading text-lg font-semibold">Dr Gyan Homeopathy</p>
           <p className="mt-1 text-sm text-leaf-200">Treatment for Everyone</p>
           <address className="mt-3 text-sm not-italic text-leaf-100">
             Shop No. 9, 1st Floor, Kshitij Complex, Sector 4,
@@ -60,7 +60,7 @@ export default function Footer() {
       </div>
 
       <div className="border-t border-leaf-200/20 px-4 py-4 text-center text-xs text-leaf-200 md:px-6">
-        © {new Date().getFullYear()} Dr. Gyan&apos;s Homeopathy. All rights reserved.
+        © {new Date().getFullYear()} Dr Gyan Homeopathy. All rights reserved.
       </div>
     </footer>
   );
