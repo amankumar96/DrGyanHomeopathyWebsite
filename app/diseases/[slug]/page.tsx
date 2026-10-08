@@ -70,6 +70,12 @@ export default async function DiseaseDetailPage({
 
       <h1 className="mt-4 font-heading text-3xl font-semibold text-forest-800 md:text-4xl">
         {disease.title}
+        {disease.hindiName && (
+          <span className="font-devanagari block text-xl font-medium text-forest-800/70 md:inline md:text-2xl">
+            {" "}
+            ({disease.hindiName})
+          </span>
+        )}
       </h1>
 
       {disease.resolvedImages.length === 0 ? (

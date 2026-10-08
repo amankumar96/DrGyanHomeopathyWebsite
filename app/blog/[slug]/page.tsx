@@ -17,7 +17,7 @@ export async function generateMetadata({
   const post = getBlogPostBySlug(slug);
   if (!post) return {};
   return {
-    title: `${post.title} | Dr. Gyan's Homeopathy`,
+    title: `${post.title} | Dr Gyan Homeopathy`,
     description: post.excerpt,
   };
 }

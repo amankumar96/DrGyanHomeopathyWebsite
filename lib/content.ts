@@ -48,6 +48,12 @@ export type Faq = {
 
 export type DiseaseFrontmatter = {
   title: string;
+  /** Bilingual Hindi name — "Hinglish / देवनागरी", e.g. "Muhase / मुहासे".
+   * Shown only in the H1 and folded into seoTitle (not in nav/cards/
+   * breadcrumbs, which stay English-only to avoid clutter). Optional
+   * during rollout — falsy/missing means the page just shows the
+   * English title, same as before this field existed. */
+  hindiName?: string;
   slug: string;
   category: string;
   summary: string;

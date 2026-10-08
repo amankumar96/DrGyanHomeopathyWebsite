@@ -36,6 +36,12 @@
 
   --font-heading: var(--font-fraunces);
   --font-body: var(--font-inter);
+  /* Neither Fraunces nor Inter ship Devanagari glyphs — without this,
+     Hindi text in a disease page's H1 falls back to whatever Devanagari
+     font (if any) happens to be installed on the visitor's system,
+     which is inconsistent and sometimes missing entirely (tofu boxes).
+     Noto Sans Devanagari guarantees it renders the same for everyone. */
+  --font-devanagari: var(--font-noto-devanagari);
 }
 
 body {

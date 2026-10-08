@@ -3,9 +3,9 @@ import { getAllBlogPosts } from "@/lib/content";
 import BlogCard from "@/components/BlogCard";
 
 export const metadata = {
-  title: "Latest News | Dr. Gyan's Homeopathy",
+  title: "Latest News | Dr Gyan Homeopathy",
   description:
-    "Health tips, seasonal advice and clinic news from Dr. Gyan's Homeopathy, Vaishali, Ghaziabad.",
+    "Health tips, seasonal advice and clinic news from Dr Gyan Homeopathy, Vaishali, Ghaziabad.",
 };
 
 export default async function BlogPage({
