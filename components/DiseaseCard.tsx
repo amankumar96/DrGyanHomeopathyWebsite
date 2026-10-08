@@ -5,17 +5,18 @@ import type { Disease } from "@/lib/content";
 export default function DiseaseCard({
   disease,
 }: {
-  disease: Pick<Disease, "slug" | "title" | "summary" | "category" | "imageAlt" | "resolvedImage">;
+  disease: Pick<Disease, "slug" | "title" | "summary" | "category" | "imageAlt" | "resolvedImages">;
 }) {
+  const thumbnail = disease.resolvedImages[0] ?? null;
   return (
     <Link
       href={`/diseases/${disease.slug}`}
       className="flex flex-col overflow-hidden rounded-2xl border border-leaf-200 bg-white transition-shadow hover:shadow-md"
     >
       <div className="relative aspect-[4/3] w-full bg-leaf-200/60">
-        {disease.resolvedImage ? (
+        {thumbnail ? (
           <Image
-            src={disease.resolvedImage}
+            src={thumbnail}
             alt={disease.imageAlt}
             fill
             className="object-cover"

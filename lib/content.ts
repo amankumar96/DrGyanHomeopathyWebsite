@@ -1,6 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import matter from "gray-matter";
+import { cache } from "react";
 
 /**
  * MDX content loader — the only place in the app that touches the filesystem
@@ -13,11 +14,13 @@ const BLOG_DIR = path.join(process.cwd(), "content/blog");
 
 const IMAGE_EXTENSIONS = new Set([".webp", ".jpg", ".jpeg", ".png"]);
 
+const MAX_DISEASE_IMAGES = 4;
+
 /**
  * Each disease has its own folder (public/images/diseases/<slug>/) — drop
- * any image file in there, any filename, and it's picked up automatically;
- * no renaming to match the slug required. If more than one image is
- * present, the alphabetically-first one wins.
+ * up to 4 image files in there, any filenames, and they're picked up
+ * automatically in alphabetical order (so name them 1.jpg, 2.jpg... to
+ * control display order); no renaming to match the slug required.
  *
  * The path is built inline (not passed through a shared helper with a `dir`
  * parameter) so Turbopack can statically trace it to this one subfolder —
@@ -27,14 +30,15 @@ const IMAGE_EXTENSIONS = new Set([".webp", ".jpg", ".jpeg", ".png"]);
  * Blog posts deliberately don't have an equivalent — Latest News cards are
  * text-only by design, no image slot.
  */
-function resolveDiseaseImage(slug: string): string | null {
+function resolveDiseaseImages(slug: string): string[] {
   const dir = path.join(process.cwd(), "public/images/diseases", slug);
-  if (!fs.existsSync(dir)) return null;
-  const file = fs
+  if (!fs.existsSync(dir)) return [];
+  return fs
     .readdirSync(dir)
     .filter((f) => IMAGE_EXTENSIONS.has(path.extname(f).toLowerCase()))
-    .sort()[0];
-  return file ? `/images/diseases/${slug}/${file}` : null;
+    .sort()
+    .slice(0, MAX_DISEASE_IMAGES)
+    .map((file) => `/images/diseases/${slug}/${file}`);
 }
 
 export type Faq = {
@@ -60,8 +64,9 @@ export type DiseaseFrontmatter = {
 
 export type Disease = DiseaseFrontmatter & {
   content: string;
-  /** Public URL if an uploaded image exists for this slug, else null (render a placeholder). */
-  resolvedImage: string | null;
+  /** Public URLs of uploaded images for this slug, up to 4, in display
+   * order. Empty array if none (render a placeholder). */
+  resolvedImages: string[];
 };
 
 export type BlogFrontmatter = {
@@ -93,22 +98,64 @@ function readMdxDir<T>(dir: string): Array<T & { content: string }> {
     });
 }
 
-export function getAllDiseases(): Disease[] {
+/** Wrapped in React's cache() so the 163 MDX files are read from disk once
+ * per render pass, not once per caller — getDiseaseBySlug, getDiseaseCategoryMenu,
+ * getDiseaseSearchIndex, and getSearchIndex all call this independently, and
+ * without this a single disease page build could re-read the whole content
+ * directory 4-5 times. See Documents/disease-page-caching-and-domain-plan.md. */
+export const getAllDiseases = cache((): Disease[] => {
   return readMdxDir<DiseaseFrontmatter>(DISEASES_DIR)
     .map((disease) => ({
       ...disease,
-      resolvedImage: resolveDiseaseImage(disease.slug),
+      resolvedImages: resolveDiseaseImages(disease.slug),
     }))
     .sort((a, b) => a.title.localeCompare(b.title));
-}
+});
 
 export function getDiseaseBySlug(slug: string): Disease | undefined {
   return getAllDiseases().find((disease) => disease.slug === slug);
 }
 
+export type CategoryMergeGroup = {
+  /** Display name shown in the nav menu and /diseases pills. */
+  name: string;
+  /** Raw `Disease.category` values (as written in MDX frontmatter) folded
+   * into this group. Most entries are 1:1 passthroughs; a few combine two
+   * related raw categories (e.g. Skin + Hair) into one display category. */
+  sourceCategories: string[];
+};
+
+/** Maps the 16 raw disease categories onto 13 user-facing display
+ * categories for the nav mega-menu and /diseases filter pills. Edit this
+ * array (not the MDX files) to change the menu's taxonomy — see
+ * components/Header.tsx and app/diseases/page.tsx, both of which build
+ * `?category=<sourceCategories joined by comma>` links from it. */
+export const CATEGORY_MERGE_GROUPS: CategoryMergeGroup[] = [
+  { name: "Skin & Hair", sourceCategories: ["Skin", "Hair"] },
+  {
+    name: "Brain, Neurological & Mental Wellness",
+    sourceCategories: ["Neurological", "Mental Wellness"],
+  },
+  { name: "Eye & Ear Care", sourceCategories: ["Eye Care", "Ear Care"] },
+  { name: "Digestive", sourceCategories: ["Digestive"] },
+  { name: "Respiratory", sourceCategories: ["Respiratory"] },
+  { name: "Joints & Muscles", sourceCategories: ["Joints"] },
+  { name: "Heart & Circulation", sourceCategories: ["Heart & Circulation"] },
+  { name: "Endocrine", sourceCategories: ["Endocrine"] },
+  { name: "Kidney & Urinary", sourceCategories: ["Kidney & Urinary"] },
+  { name: "Women's Health", sourceCategories: ["Women's Health"] },
+  { name: "Men's Health", sourceCategories: ["Men's Health"] },
+  { name: "Child Health", sourceCategories: ["Child Health"] },
+  { name: "General Health", sourceCategories: ["General Health"] },
+];
+
 export type DiseaseCategoryMenuItem = {
   name: string;
-  /** Capped, alphabetical (inherits getAllDiseases()'s title sort). */
+  /** Raw categories folded into this entry — needed to build the
+   * comma-separated `?category=` link for merged groups (never link using
+   * `name`, which is a display label, not a real `Disease.category` value). */
+  sourceCategories: string[];
+  /** Capped, alphabetical (re-sorted after combining source categories). */
   diseases: { slug: string; title: string }[];
   /** Full count in this category, for "View all X (N)" links. */
   totalCount: number;
@@ -116,31 +163,47 @@ export type DiseaseCategoryMenuItem = {
 
 const DISEASE_MENU_CAP = 6;
 
-/** Diseases grouped by category for the nav mega-menu: capped per category
- * (smallest real categories are 1-3 items, so the cap only trims the ~10
- * categories that actually need it) and ordered by total size, most content
- * first — a simple, non-medical-claim ordering. See components/Header.tsx. */
+/** Diseases grouped by merged display category for the nav mega-menu:
+ * capped per category and ordered by total size, most content first — a
+ * simple, non-medical-claim ordering. See components/Header.tsx. */
 export function getDiseaseCategoryMenu(): DiseaseCategoryMenuItem[] {
-  const grouped: Record<string, { slug: string; title: string }[]> = {};
+  const byCategory: Record<string, { slug: string; title: string }[]> = {};
   for (const disease of getAllDiseases()) {
-    grouped[disease.category] ??= [];
-    grouped[disease.category].push({ slug: disease.slug, title: disease.title });
+    byCategory[disease.category] ??= [];
+    byCategory[disease.category].push({ slug: disease.slug, title: disease.title });
   }
 
-  return Object.entries(grouped)
-    .map(([name, diseases]) => ({
-      name,
-      totalCount: diseases.length,
-      diseases: diseases.slice(0, DISEASE_MENU_CAP),
-    }))
-    .sort((a, b) => b.totalCount - a.totalCount);
+  return CATEGORY_MERGE_GROUPS.map((group) => {
+    // Re-sort after combining — concatenating two already-sorted lists
+    // (e.g. Skin + Hair) does not stay alphabetically sorted.
+    const combined = group.sourceCategories
+      .flatMap((raw) => byCategory[raw] ?? [])
+      .sort((a, b) => a.title.localeCompare(b.title));
+    return {
+      name: group.name,
+      sourceCategories: group.sourceCategories,
+      totalCount: combined.length,
+      diseases: combined.slice(0, DISEASE_MENU_CAP),
+    };
+  }).sort((a, b) => b.totalCount - a.totalCount);
 }
 
-export function getAllBlogPosts(): BlogPost[] {
+export type DiseaseSearchIndexItem = { slug: string; title: string; category: string };
+
+/** Lightweight disease-only index for the nav dropdown's live search box —
+ * distinct from getSearchIndex() below (used by /search), which folds in
+ * full MDX body text and is too heavy to ship into the global layout
+ * bundle that every page pays for via app/layout.tsx. */
+export function getDiseaseSearchIndex(): DiseaseSearchIndexItem[] {
+  return getAllDiseases().map((d) => ({ slug: d.slug, title: d.title, category: d.category }));
+}
+
+/** Same cache() treatment as getAllDiseases() — see note there. */
+export const getAllBlogPosts = cache((): BlogPost[] => {
   return readMdxDir<BlogFrontmatter>(BLOG_DIR).sort(
     (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
   );
-}
+});
 
 export function getBlogPostBySlug(slug: string): BlogPost | undefined {
   return getAllBlogPosts().find((post) => post.slug === slug);

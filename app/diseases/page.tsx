@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { getAllDiseases } from "@/lib/content";
+import { getAllDiseases, CATEGORY_MERGE_GROUPS } from "@/lib/content";
 import DiseaseCard from "@/components/DiseaseCard";
 
 export const metadata = {
@@ -13,12 +13,21 @@ export default async function DiseasesPage({
 }: {
   searchParams: Promise<{ category?: string }>;
 }) {
-  const { category: activeCategory } = await searchParams;
+  const { category: activeCategoryParam } = await searchParams;
   const diseases = getAllDiseases();
-  const categories = Array.from(new Set(diseases.map((d) => d.category))).sort();
-  const filtered = activeCategory
-    ? diseases.filter((d) => d.category === activeCategory)
+  const activeCategories = activeCategoryParam
+    ? activeCategoryParam
+        .split(",")
+        .map((c) => c.trim())
+        .filter(Boolean)
+    : null;
+  const filtered = activeCategories
+    ? diseases.filter((d) => activeCategories.includes(d.category))
     : diseases;
+  const isPillActive = (group: (typeof CATEGORY_MERGE_GROUPS)[number]) =>
+    activeCategories !== null &&
+    activeCategories.length === group.sourceCategories.length &&
+    group.sourceCategories.every((c) => activeCategories.includes(c));
 
   return (
     <section className="mx-auto max-w-6xl px-4 py-14 md:px-6">
@@ -39,33 +48,31 @@ export default async function DiseasesPage({
         </p>
       ) : (
         <>
-          {categories.length > 1 && (
-            <div className="mt-8 flex flex-wrap gap-2">
+          <div className="mt-8 flex flex-wrap gap-2">
+            <Link
+              href="/diseases"
+              className={`rounded-full px-4 py-1.5 text-sm font-medium ${
+                !activeCategories
+                  ? "bg-forest-600 text-white"
+                  : "bg-leaf-100 text-forest-800 hover:bg-leaf-200"
+              }`}
+            >
+              All
+            </Link>
+            {CATEGORY_MERGE_GROUPS.map((group) => (
               <Link
-                href="/diseases"
+                key={group.name}
+                href={`/diseases?category=${encodeURIComponent(group.sourceCategories.join(","))}`}
                 className={`rounded-full px-4 py-1.5 text-sm font-medium ${
-                  !activeCategory
+                  isPillActive(group)
                     ? "bg-forest-600 text-white"
                     : "bg-leaf-100 text-forest-800 hover:bg-leaf-200"
                 }`}
               >
-                All
+                {group.name}
               </Link>
-              {categories.map((category) => (
-                <Link
-                  key={category}
-                  href={`/diseases?category=${encodeURIComponent(category)}`}
-                  className={`rounded-full px-4 py-1.5 text-sm font-medium ${
-                    activeCategory === category
-                      ? "bg-forest-600 text-white"
-                      : "bg-leaf-100 text-forest-800 hover:bg-leaf-200"
-                  }`}
-                >
-                  {category}
-                </Link>
-              ))}
-            </div>
-          )}
+            ))}
+          </div>
 
           <div className="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {filtered.map((disease) => (
