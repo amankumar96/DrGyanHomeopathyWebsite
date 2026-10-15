@@ -6,6 +6,14 @@ export const metadata = {
   title: "Conditions We Treat | Dr Gyan Homeopathy",
   description:
     "Browse the conditions Dr Gyan Homeopathy treats, from skin and respiratory health to women's and child health.",
+  alternates: { canonical: "/diseases" },
+  openGraph: {
+    title: "Conditions We Treat | Dr Gyan Homeopathy",
+    description:
+      "Browse the conditions Dr Gyan Homeopathy treats, from skin and respiratory health to women's and child health.",
+    images: [{ url: "/images/hero-bg-minimal.png" }],
+  },
+  twitter: { card: "summary_large_image" },
 };
 
 export default async function DiseasesPage({

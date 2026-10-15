@@ -5,6 +5,13 @@ import SearchClient from "@/components/SearchClient";
 export const metadata = {
   title: "Search | Dr Gyan Homeopathy",
   description: "Search conditions treated and the latest news from Dr Gyan Homeopathy.",
+  alternates: { canonical: "/search" },
+  openGraph: {
+    title: "Search | Dr Gyan Homeopathy",
+    description: "Search conditions treated and the latest news from Dr Gyan Homeopathy.",
+    images: [{ url: "/images/hero-bg-minimal.png" }],
+  },
+  twitter: { card: "summary_large_image" },
 };
 
 export default function SearchPage() {

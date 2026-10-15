@@ -5,6 +5,14 @@ export const metadata = {
   title: "Contact Us | Dr Gyan Homeopathy",
   description:
     "Get in touch with Dr Gyan Homeopathy in Vaishali, Ghaziabad — call, WhatsApp, or book an appointment online.",
+  alternates: { canonical: "/contact" },
+  openGraph: {
+    title: "Contact Us | Dr Gyan Homeopathy",
+    description:
+      "Get in touch with Dr Gyan Homeopathy in Vaishali, Ghaziabad — call, WhatsApp, or book an appointment online.",
+    images: [{ url: "/images/hero-bg-minimal.png" }],
+  },
+  twitter: { card: "summary_large_image" },
 };
 
 export default function ContactPage() {

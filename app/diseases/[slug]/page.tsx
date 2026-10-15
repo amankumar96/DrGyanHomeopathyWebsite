@@ -5,6 +5,11 @@ import { MDXRemote } from "next-mdx-remote/rsc";
 import { getAllDiseases, getDiseaseBySlug } from "@/lib/content";
 import Disclaimer from "@/components/Disclaimer";
 import DiseaseCard from "@/components/DiseaseCard";
+import {
+  getFaqPageSchema,
+  getMedicalWebPageSchema,
+  jsonLdScriptProps,
+} from "@/lib/structuredData";
 
 export function generateStaticParams() {
   return getAllDiseases().map((disease) => ({ slug: disease.slug }));
@@ -18,9 +23,20 @@ export async function generateMetadata({
   const { slug } = await params;
   const disease = getDiseaseBySlug(slug);
   if (!disease) return {};
+  const ogImage = disease.resolvedImages[0] ?? "/images/hero-bg-minimal.png";
   return {
     title: disease.seoTitle,
     description: disease.seoDescription,
+    alternates: { canonical: `/diseases/${slug}` },
+    openGraph: {
+      title: disease.seoTitle,
+      description: disease.seoDescription,
+      type: "article",
+      images: [{ url: ogImage }],
+    },
+    twitter: {
+      card: "summary_large_image",
+    },
   };
 }
 
@@ -55,8 +71,12 @@ export default async function DiseaseDetailPage({
     .map((relatedSlug) => allDiseases.find((d) => d.slug === relatedSlug))
     .filter((d): d is NonNullable<typeof d> => Boolean(d));
 
+  const faqSchema = getFaqPageSchema(disease.faqs);
+
   return (
     <article className="mx-auto max-w-3xl px-4 py-14 md:px-6">
+      <script {...jsonLdScriptProps(getMedicalWebPageSchema(disease))} />
+      {faqSchema && <script {...jsonLdScriptProps(faqSchema)} />}
       <nav aria-label="Breadcrumb" className="text-sm text-ink/60">
         <Link href="/" className="hover:text-forest-600">
           Home
