@@ -14,9 +14,18 @@ import type { NextConfig } from "next";
 // documented "Without Nonces" default example. Every other directive stays
 // strict. frame-src is scoped to Google Maps for the /contact embed only.
 // See Documents/seo-and-security-hardening.md for the full reasoning.
+//
+// 'unsafe-eval' is added to script-src in development only, matching
+// Next.js's own documented CSP examples exactly (node_modules/next/dist/
+// docs/01-app/02-guides/content-security-policy.md) — React uses eval()
+// in dev mode to reconstruct server-side error stacks in the browser for
+// debugging; it never uses eval() in production. Without this, dev mode
+// throws "eval() is not supported in this environment" and breaks.
+const isDev = process.env.NODE_ENV === "development";
+
 const CONTENT_SECURITY_POLICY = [
   "default-src 'self'",
-  "script-src 'self' 'unsafe-inline'",
+  `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ""}`,
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' data:",
   "font-src 'self'",
