@@ -6,6 +6,7 @@ import Footer from "@/components/Footer";
 import PageBackground from "@/components/PageBackground";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import { getDiseaseCategoryMenu, getDiseaseSearchIndex } from "@/lib/content";
+import { getSiteUrl } from "@/lib/structuredData";
 
 const fraunces = Fraunces({
   variable: "--font-fraunces",
@@ -28,10 +29,22 @@ const notoDevanagari = Noto_Sans_Devanagari({
   weight: ["500", "600"],
 });
 
+const siteUrl = getSiteUrl();
+
 export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl),
   title: "Dr Gyan Homeopathy | Treatment for Everyone",
   description:
     "Homeopathic care in Vaishali, Ghaziabad from Dr. Gyanesh Sharma, BHMS, practising since 2003.",
+  openGraph: {
+    type: "website",
+    siteName: "Dr Gyan Homeopathy",
+    locale: "en_IN",
+    images: [{ url: "/images/hero-bg-minimal.png", width: 2398, height: 1349 }],
+  },
+  twitter: {
+    card: "summary_large_image",
+  },
 };
 
 export default function RootLayout({

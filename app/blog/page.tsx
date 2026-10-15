@@ -6,6 +6,14 @@ export const metadata = {
   title: "Latest News | Dr Gyan Homeopathy",
   description:
     "Health tips, seasonal advice and clinic news from Dr Gyan Homeopathy, Vaishali, Ghaziabad.",
+  alternates: { canonical: "/blog" },
+  openGraph: {
+    title: "Latest News | Dr Gyan Homeopathy",
+    description:
+      "Health tips, seasonal advice and clinic news from Dr Gyan Homeopathy, Vaishali, Ghaziabad.",
+    images: [{ url: "/images/hero-bg-minimal.png" }],
+  },
+  twitter: { card: "summary_large_image" },
 };
 
 export default async function BlogPage({

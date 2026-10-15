@@ -6,6 +6,12 @@ import BlogCard from "@/components/BlogCard";
 import TestimonialsCarousel from "@/components/TestimonialsCarousel";
 import SocialLinks from "@/components/SocialLinks";
 import { getAllDiseases, getAllBlogPosts } from "@/lib/content";
+import { getLocalBusinessSchema, jsonLdScriptProps } from "@/lib/structuredData";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  alternates: { canonical: "/" },
+};
 
 const TRUST_POINTS = [
   {
@@ -77,6 +83,7 @@ export default function Home() {
 
   return (
     <>
+      <script {...jsonLdScriptProps(getLocalBusinessSchema())} />
       <Hero />
 
       {/* Trust strip — one continuous banner, not separate cards */}

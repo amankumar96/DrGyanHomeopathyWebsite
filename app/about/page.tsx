@@ -4,6 +4,14 @@ export const metadata = {
   title: "About Dr. Gyanesh Sharma | Dr Gyan Homeopathy",
   description:
     "Dr. Gyanesh Sharma, BHMS, practising homeopathy in Vaishali, Ghaziabad since 2003.",
+  alternates: { canonical: "/about" },
+  openGraph: {
+    title: "About Dr. Gyanesh Sharma | Dr Gyan Homeopathy",
+    description:
+      "Dr. Gyanesh Sharma, BHMS, practising homeopathy in Vaishali, Ghaziabad since 2003.",
+    images: [{ url: "/images/hero-bg-minimal.png" }],
+  },
+  twitter: { card: "summary_large_image" },
 };
 
 const TIMINGS = [

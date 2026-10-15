@@ -19,6 +19,18 @@ export async function generateMetadata({
   return {
     title: `${post.title} | Dr Gyan Homeopathy`,
     description: post.excerpt,
+    alternates: { canonical: `/blog/${slug}` },
+    openGraph: {
+      title: post.title,
+      description: post.excerpt,
+      type: "article",
+      publishedTime: post.date,
+      authors: [post.author],
+      images: [{ url: "/images/hero-bg-minimal.png" }],
+    },
+    twitter: {
+      card: "summary_large_image",
+    },
   };
 }
 
